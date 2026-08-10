@@ -1,11 +1,11 @@
-# Banco De 120 Issues
+# Banco De 120 requisitos
 
-Este documento organiza 120 issues em 40 módulos independentes. Cada aluno pode assumir um módulo completo com 3 issues.
+Este documento organiza 120 requisitos em 40 módulos independentes. Cada aluno pode assumir um módulo completo com 3 requisitos.
 
 Regra pedagógica:
 
 - cada módulo deve funcionar sozinho;
-- cada aluno cria as 3 issues do seu módulo no GitHub;
+- cada aluno cria as 3 requisitos do seu módulo no GitHub;
 - cada aluno trabalha em uma branch própria;
 - cada aluno cria testes para as 3 entregas;
 - cada aluno cria a própria CI da branch;
@@ -14,7 +14,7 @@ Regra pedagógica:
 Formato sugerido de branch:
 
 ```text
-feature/<numero-issue>-<slug>
+feature/<numero-requisito>-<slug>
 ```
 
 Exemplo:
@@ -25,7 +25,7 @@ feature/42-product-search
 
 ## Módulo 01 - Pesquisa De Produtos
 
-### Issue 001 - Campo De Busca No Catálogo
+### requisito 001 - Campo De Busca No Catálogo
 
 Implementar busca por nome do produto no catálogo.
 
@@ -36,7 +36,7 @@ Critérios de aceitação:
 - produtos que não correspondem ao termo ficam ocultos;
 - busca vazia mostra todos os produtos.
 
-### Issue 002 - Busca Por Descrição
+### requisito 002 - Busca Por Descrição
 
 Expandir a busca para considerar também a descrição do produto.
 
@@ -46,7 +46,7 @@ Critérios de aceitação:
 - a busca encontra produtos pela descrição;
 - a busca não diferencia maiúsculas e minúsculas.
 
-### Issue 003 - Testes Da Pesquisa
+### requisito 003 - Testes Da Pesquisa
 
 Criar testes da feature de pesquisa.
 
@@ -59,7 +59,7 @@ Critérios de aceitação:
 
 ## Módulo 02 - Categorias
 
-### Issue 004 - Filtro Por Categoria
+### requisito 004 - Filtro Por Categoria
 
 Implementar filtro de produtos por categoria.
 
@@ -69,7 +69,7 @@ Critérios de aceitação:
 - selecionar uma categoria filtra os produtos;
 - existe opção para voltar a ver todas as categorias.
 
-### Issue 005 - Contador Por Categoria
+### requisito 005 - Contador Por Categoria
 
 Exibir a quantidade de produtos em cada categoria.
 
@@ -79,7 +79,7 @@ Critérios de aceitação:
 - o contador considera os produtos cadastrados;
 - categorias sem produto não aparecem.
 
-### Issue 006 - Testes De Categoria
+### requisito 006 - Testes De Categoria
 
 Criar testes para filtro e contadores de categoria.
 
@@ -92,7 +92,7 @@ Critérios de aceitação:
 
 ## Módulo 03 - Ordenação
 
-### Issue 007 - Ordenar Por Nome
+### requisito 007 - Ordenar Por Nome
 
 Adicionar ordenação alfabetica no catálogo.
 
@@ -102,7 +102,7 @@ Critérios de aceitação:
 - produtos podem ser ordenados de A a Z;
 - produtos podem ser ordenados de Z a A.
 
-### Issue 008 - Ordenar Por Preço
+### requisito 008 - Ordenar Por Preço
 
 Adicionar ordenação por preço.
 
@@ -112,7 +112,7 @@ Critérios de aceitação:
 - produtos podem ser ordenados do maior preço para o menor;
 - a ordenação funciona junto com a listagem base.
 
-### Issue 009 - Testes De Ordenação
+### requisito 009 - Testes De Ordenação
 
 Criar testes da ordenação.
 
@@ -125,7 +125,7 @@ Critérios de aceitação:
 
 ## Módulo 04 - Detalhes Do Produto
 
-### Issue 010 - Página De Detalhes
+### requisito 010 - Página De Detalhes
 
 Criar página de detalhes para cada produto.
 
@@ -135,7 +135,7 @@ Critérios de aceitação:
 - a página exibe nome, descrição, categoria, preço e estoque;
 - produto inexistente retorna página de erro amigável.
 
-### Issue 011 - Botão Adicionar Nos Detalhes
+### requisito 011 - Botão Adicionar Nos Detalhes
 
 Permitir adicionar produto ao carrinho pela página de detalhes.
 
@@ -145,7 +145,7 @@ Critérios de aceitação:
 - o botão adiciona o produto correto;
 - usuário volta ou segue para o carrinho sem erro.
 
-### Issue 012 - Testes Dos Detalhes
+### requisito 012 - Testes Dos Detalhes
 
 Criar testes da página de detalhes.
 
@@ -157,7 +157,7 @@ Critérios de aceitação:
 
 ## Módulo 05 - Produtos Promocionais
 
-### Issue 013 - Filtro De Promocoes
+### requisito 013 - Filtro De Promocoes
 
 Criar filtro para mostrar apenas produtos promocionais.
 
@@ -167,7 +167,7 @@ Critérios de aceitação:
 - apenas produtos promocionais aparecem;
 - usuário consegue voltar ao catálogo completo.
 
-### Issue 014 - Destaque Visual De Promoção
+### requisito 014 - Destaque Visual De Promoção
 
 Melhorar o destaque visual de produtos promocionais.
 
@@ -177,7 +177,7 @@ Critérios de aceitação:
 - produto não promocional não recebe destaque;
 - o destaque não quebra o layout mobile.
 
-### Issue 015 - Testes De Promocoes
+### requisito 015 - Testes De Promocoes
 
 Criar testes para filtro e destaque promocional.
 
@@ -189,7 +189,7 @@ Critérios de aceitação:
 
 ## Módulo 06 - Estoque Baixo
 
-### Issue 016 - Sinalizar Estoque Baixo
+### requisito 016 - Sinalizar Estoque Baixo
 
 Exibir aviso quando o produto estiver com estoque baixo.
 
@@ -199,7 +199,7 @@ Critérios de aceitação:
 - produtos acima do limite não exibem aviso;
 - o limite fica documentado na feature.
 
-### Issue 017 - Filtro De Estoque Baixo
+### requisito 017 - Filtro De Estoque Baixo
 
 Criar filtro para listar apenas produtos com estoque baixo.
 
@@ -209,7 +209,7 @@ Critérios de aceitação:
 - somente produtos dentro do limite aparecem;
 - busca sem resultado exibe mensagem amigável.
 
-### Issue 018 - Testes De Estoque Baixo
+### requisito 018 - Testes De Estoque Baixo
 
 Criar testes da feature de estoque baixo.
 
@@ -221,7 +221,7 @@ Critérios de aceitação:
 
 ## Módulo 07 - Produtos Esgotados
 
-### Issue 019 - Sinalizar Produto Esgotado
+### requisito 019 - Sinalizar Produto Esgotado
 
 Exibir estado de produto esgotado.
 
@@ -231,7 +231,7 @@ Critérios de aceitação:
 - botão de adicionar fica desabilitado;
 - produto continua visivel no catálogo.
 
-### Issue 020 - Filtro De Esgotados
+### requisito 020 - Filtro De Esgotados
 
 Criar filtro para produtos esgotados.
 
@@ -241,7 +241,7 @@ Critérios de aceitação:
 - usuário consegue voltar ao catálogo completo;
 - mensagem aparece quando não há esgotados.
 
-### Issue 021 - Testes De Esgotados
+### requisito 021 - Testes De Esgotados
 
 Criar testes para produtos esgotados.
 
@@ -253,7 +253,7 @@ Critérios de aceitação:
 
 ## Módulo 08 - Limite De Estoque No Carrinho
 
-### Issue 022 - Bloquear Quantidade Acima Do Estoque
+### requisito 022 - Bloquear Quantidade Acima Do Estoque
 
 Impedir que o usuário coloque no carrinho quantidade maior que o estoque.
 
@@ -263,7 +263,7 @@ Critérios de aceitação:
 - tentativa acima do estoque mostra aviso;
 - o carrinho mantem quantidade valida.
 
-### Issue 023 - Mensagem De Estoque Disponivel
+### requisito 023 - Mensagem De Estoque Disponivel
 
 Exibir estoque disponível no item do carrinho.
 
@@ -273,7 +273,7 @@ Critérios de aceitação:
 - a mensagem atualiza após alterar quantidade;
 - layout continua legível em telas pequenas.
 
-### Issue 024 - Testes De Limite De Estoque
+### requisito 024 - Testes De Limite De Estoque
 
 Criar testes para limite de estoque no carrinho.
 
@@ -285,7 +285,7 @@ Critérios de aceitação:
 
 ## Módulo 09 - Limpar Carrinho
 
-### Issue 025 - Botão Limpar Carrinho
+### requisito 025 - Botão Limpar Carrinho
 
 Adicionar ação para remover todos os itens do carrinho.
 
@@ -295,7 +295,7 @@ Critérios de aceitação:
 - clicar remove todos os itens;
 - carrinho vazio mostra mensagem correta.
 
-### Issue 026 - Confirmação Para Limpar Carrinho
+### requisito 026 - Confirmação Para Limpar Carrinho
 
 Adicionar confirmação antes de limpar o carrinho.
 
@@ -305,7 +305,7 @@ Critérios de aceitação:
 - cancelar mantem os itens;
 - confirmar remove todos os itens.
 
-### Issue 027 - Testes De Limpeza Do Carrinho
+### requisito 027 - Testes De Limpeza Do Carrinho
 
 Criar testes para limpar carrinho.
 
@@ -317,7 +317,7 @@ Critérios de aceitação:
 
 ## Módulo 10 - Subtotal No Carrinho
 
-### Issue 028 - Exibir Subtotal Por Item
+### requisito 028 - Exibir Subtotal Por Item
 
 Mostrar subtotal de cada item no carrinho.
 
@@ -327,7 +327,7 @@ Critérios de aceitação:
 - subtotal aparece em cada linha;
 - valores usam formato monetario brasileiro.
 
-### Issue 029 - Atualizar Subtotal Ao Alterar Quantidade
+### requisito 029 - Atualizar Subtotal Ao Alterar Quantidade
 
 Recalcular subtotal quando a quantidade muda.
 
@@ -337,7 +337,7 @@ Critérios de aceitação:
 - total geral permanece coerente;
 - não há necessidade de recarregar dados externos.
 
-### Issue 030 - Testes De Subtotal
+### requisito 030 - Testes De Subtotal
 
 Criar testes para subtotal por item.
 
@@ -349,7 +349,7 @@ Critérios de aceitação:
 
 ## Módulo 11 - Contador Do Carrinho
 
-### Issue 031 - Contador No Menu
+### requisito 031 - Contador No Menu
 
 Exibir quantidade total de itens no menu do carrinho.
 
@@ -359,7 +359,7 @@ Critérios de aceitação:
 - contador soma quantidades, não apenas produtos diferentes;
 - contador desaparece ou zera quando carrinho está vazio.
 
-### Issue 032 - Atualização Do Contador
+### requisito 032 - Atualização Do Contador
 
 Atualizar contador ao adicionar, remover ou alterar quantidade.
 
@@ -369,7 +369,7 @@ Critérios de aceitação:
 - remover item reduz contador;
 - alterar quantidade atualiza contador.
 
-### Issue 033 - Testes Do Contador
+### requisito 033 - Testes Do Contador
 
 Criar testes para contador do carrinho.
 
@@ -381,7 +381,7 @@ Critérios de aceitação:
 
 ## Módulo 12 - Confirmação De Remoção
 
-### Issue 034 - Confirmar Remoção De Item
+### requisito 034 - Confirmar Remoção De Item
 
 Adicionar confirmação antes de remover item do carrinho.
 
@@ -391,7 +391,7 @@ Critérios de aceitação:
 - cancelar mantem o item;
 - confirmar remove o item.
 
-### Issue 035 - Mensagem Apos Remover Item
+### requisito 035 - Mensagem Apos Remover Item
 
 Exibir mensagem após remoção de item.
 
@@ -401,7 +401,7 @@ Critérios de aceitação:
 - mensagem aparece uma vez;
 - carrinho reflete a remoção.
 
-### Issue 036 - Testes De Remoção
+### requisito 036 - Testes De Remoção
 
 Criar testes para confirmação de remoção.
 
@@ -413,7 +413,7 @@ Critérios de aceitação:
 
 ## Módulo 13 - Cupom Simples
 
-### Issue 037 - Campo De Cupom
+### requisito 037 - Campo De Cupom
 
 Criar campo para informar cupom no carrinho.
 
@@ -423,7 +423,7 @@ Critérios de aceitação:
 - usuário consegue enviar um código;
 - cupom desconhecido mostra mensagem amigável.
 
-### Issue 038 - Cupom DEVOPS10
+### requisito 038 - Cupom DEVOPS10
 
 Implementar cupom `DEVOPS10` com 10% de desconto.
 
@@ -433,7 +433,7 @@ Critérios de aceitação:
 - total final exibe desconto;
 - cupom invalido não altera total.
 
-### Issue 039 - Testes De Cupom
+### requisito 039 - Testes De Cupom
 
 Criar testes para cupom simples.
 
@@ -445,7 +445,7 @@ Critérios de aceitação:
 
 ## Módulo 14 - Desconto Por Categoria
 
-### Issue 040 - Regra De Desconto Por Categoria
+### requisito 040 - Regra De Desconto Por Categoria
 
 Criar regra de desconto para uma categoria específica.
 
@@ -455,7 +455,7 @@ Critérios de aceitação:
 - outras categorias não recebem desconto;
 - regra fica documentada na feature.
 
-### Issue 041 - Exibir Desconto Por Categoria
+### requisito 041 - Exibir Desconto Por Categoria
 
 Mostrar desconto aplicado no resumo do carrinho.
 
@@ -465,7 +465,7 @@ Critérios de aceitação:
 - resumo exibe total final;
 - layout continua claro com ou sem desconto.
 
-### Issue 042 - Testes De Desconto Por Categoria
+### requisito 042 - Testes De Desconto Por Categoria
 
 Criar testes da regra de desconto por categoria.
 
@@ -477,7 +477,7 @@ Critérios de aceitação:
 
 ## Módulo 15 - Frete Gratis
 
-### Issue 043 - Regra De Frete Gratis
+### requisito 043 - Regra De Frete Gratis
 
 Criar regra de frete grátis para compras acima de um valor mínimo.
 
@@ -487,7 +487,7 @@ Critérios de aceitação:
 - compras acima do valor exibem frete grátis;
 - compras abaixo exibem mensagem de quanto falta.
 
-### Issue 044 - Indicador De Progresso Para Frete
+### requisito 044 - Indicador De Progresso Para Frete
 
 Exibir progresso até atingir frete grátis.
 
@@ -497,7 +497,7 @@ Critérios de aceitação:
 - indicador chega a 100% quando atingir o mínimo;
 - indicador não quebra layout mobile.
 
-### Issue 045 - Testes De Frete Gratis
+### requisito 045 - Testes De Frete Gratis
 
 Criar testes da feature de frete grátis.
 
@@ -509,7 +509,7 @@ Critérios de aceitação:
 
 ## Módulo 16 - Leve 3 Pague 2
 
-### Issue 046 - Regra Leve 3 Pague 2
+### requisito 046 - Regra Leve 3 Pague 2
 
 Implementar promoção "leve 3 pague 2" para uma categoria ou produto.
 
@@ -519,7 +519,7 @@ Critérios de aceitação:
 - quantidade menor que 3 não recebe desconto;
 - produto/categoria da regra fica documentado.
 
-### Issue 047 - Exibir Economia Da Promoção
+### requisito 047 - Exibir Economia Da Promoção
 
 Mostrar economia gerada pela promoção.
 
@@ -529,7 +529,7 @@ Critérios de aceitação:
 - total final considera economia;
 - mensagem aparece apenas quando regra se aplica.
 
-### Issue 048 - Testes Leve 3 Pague 2
+### requisito 048 - Testes Leve 3 Pague 2
 
 Criar testes da promoção.
 
@@ -541,7 +541,7 @@ Critérios de aceitação:
 
 ## Módulo 17 - Compra Mínima
 
-### Issue 049 - Bloquear Checkout Abaixo Do Minimo
+### requisito 049 - Bloquear Checkout Abaixo Do Minimo
 
 Definir valor mínimo para finalizar compra.
 
@@ -551,7 +551,7 @@ Critérios de aceitação:
 - usuário vê quanto falta para atingir o mínimo;
 - compras acima do mínimo podem finalizar.
 
-### Issue 050 - Mensagem De Compra Mínima
+### requisito 050 - Mensagem De Compra Mínima
 
 Exibir mensagem clara no carrinho e checkout.
 
@@ -561,7 +561,7 @@ Critérios de aceitação:
 - checkout mostra bloqueio quando necessario;
 - mensagem desaparece quando total e suficiente.
 
-### Issue 051 - Testes De Compra Mínima
+### requisito 051 - Testes De Compra Mínima
 
 Criar testes da regra de compra mínima.
 
@@ -573,7 +573,7 @@ Critérios de aceitação:
 
 ## Módulo 18 - Nome Do Cliente
 
-### Issue 052 - Nome Obrigatorio No Checkout
+### requisito 052 - Nome Obrigatorio No Checkout
 
 Tornar nome do cliente obrigatorio no checkout.
 
@@ -583,7 +583,7 @@ Critérios de aceitação:
 - nome vazio mostra erro;
 - pedido salvo contém nome informado.
 
-### Issue 053 - Validação De Tamanho Do Nome
+### requisito 053 - Validação De Tamanho Do Nome
 
 Validar tamanho mínimo e máximo do nome.
 
@@ -593,7 +593,7 @@ Critérios de aceitação:
 - nome longo demais mostra erro;
 - nome valido permite finalizar.
 
-### Issue 054 - Testes De Nome Do Cliente
+### requisito 054 - Testes De Nome Do Cliente
 
 Criar testes para validação de nome.
 
@@ -605,7 +605,7 @@ Critérios de aceitação:
 
 ## Módulo 19 - CPF Do Cliente
 
-### Issue 055 - Campo CPF No Checkout
+### requisito 055 - Campo CPF No Checkout
 
 Adicionar campo de CPF no checkout.
 
@@ -615,7 +615,7 @@ Critérios de aceitação:
 - CPF é salvo junto ao pedido ou cliente;
 - campo aceita CPF com ou sem pontuação.
 
-### Issue 056 - Validação Simples De CPF
+### requisito 056 - Validação Simples De CPF
 
 Criar validação simples de formato do CPF.
 
@@ -625,7 +625,7 @@ Critérios de aceitação:
 - CPF com tamanho invalido é rejeitado;
 - mensagem de erro é clara.
 
-### Issue 057 - Testes De CPF
+### requisito 057 - Testes De CPF
 
 Criar testes para campo e validação de CPF.
 
@@ -637,7 +637,7 @@ Critérios de aceitação:
 
 ## Módulo 20 - Forma De Pagamento
 
-### Issue 058 - Selecionar Forma De Pagamento
+### requisito 058 - Selecionar Forma De Pagamento
 
 Adicionar selecao de forma de pagamento no checkout.
 
@@ -647,7 +647,7 @@ Critérios de aceitação:
 - usuário precisa selecionar uma opção;
 - pedido registra a forma escolhida.
 
-### Issue 059 - Resumo Da Forma De Pagamento
+### requisito 059 - Resumo Da Forma De Pagamento
 
 Exibir forma de pagamento no resumo do pedido.
 
@@ -657,7 +657,7 @@ Critérios de aceitação:
 - API retorna forma de pagamento;
 - valor aparece de forma legível.
 
-### Issue 060 - Testes De Pagamento
+### requisito 060 - Testes De Pagamento
 
 Criar testes para forma de pagamento.
 
@@ -669,7 +669,7 @@ Critérios de aceitação:
 
 ## Módulo 21 - Forma De Entrega
 
-### Issue 061 - Selecionar Forma De Entrega
+### requisito 061 - Selecionar Forma De Entrega
 
 Adicionar retirada ou entrega no checkout.
 
@@ -679,7 +679,7 @@ Critérios de aceitação:
 - pedido registra a escolha;
 - retirada não exige endereço.
 
-### Issue 062 - Endereco Para Entrega
+### requisito 062 - Endereco Para Entrega
 
 Exigir endereço quando forma for entrega.
 
@@ -689,7 +689,7 @@ Critérios de aceitação:
 - retirada não exige endereço;
 - pedido de entrega salva endereço.
 
-### Issue 063 - Testes De Entrega
+### requisito 063 - Testes De Entrega
 
 Criar testes para forma de entrega.
 
@@ -701,7 +701,7 @@ Critérios de aceitação:
 
 ## Módulo 22 - Código Do Pedido
 
-### Issue 064 - Gerar Código Publico Do Pedido
+### requisito 064 - Gerar Código Publico Do Pedido
 
 Gerar código público para cada pedido.
 
@@ -711,7 +711,7 @@ Critérios de aceitação:
 - código é diferente do id interno ou formatado;
 - código aparece após finalizar compra.
 
-### Issue 065 - Buscar Pedido Por Código
+### requisito 065 - Buscar Pedido Por Código
 
 Criar busca de pedido pelo código público.
 
@@ -721,7 +721,7 @@ Critérios de aceitação:
 - pedido encontrado e exibido;
 - código inexistente mostra mensagem amigável.
 
-### Issue 066 - Testes De Código Do Pedido
+### requisito 066 - Testes De Código Do Pedido
 
 Criar testes para código de pedido.
 
@@ -733,7 +733,7 @@ Critérios de aceitação:
 
 ## Módulo 23 - Tela De Sucesso
 
-### Issue 067 - Criar Tela De Sucesso
+### requisito 067 - Criar Tela De Sucesso
 
 Criar tela específica após finalizar compra.
 
@@ -743,7 +743,7 @@ Critérios de aceitação:
 - tela mostra número ou código do pedido;
 - tela mostra total da compra.
 
-### Issue 068 - Ações Na Tela De Sucesso
+### requisito 068 - Ações Na Tela De Sucesso
 
 Adicionar acoes para voltar ao catálogo e ver pedidos.
 
@@ -753,7 +753,7 @@ Critérios de aceitação:
 - existe ação para ver histórico de pedidos;
 - acoes funcionam corretamente.
 
-### Issue 069 - Testes Da Tela De Sucesso
+### requisito 069 - Testes Da Tela De Sucesso
 
 Criar testes para tela de sucesso.
 
@@ -765,7 +765,7 @@ Critérios de aceitação:
 
 ## Módulo 24 - Histórico De Pedidos
 
-### Issue 070 - Filtro No Histórico
+### requisito 070 - Filtro No Histórico
 
 Adicionar filtro por nome do cliente no histórico de pedidos.
 
@@ -775,7 +775,7 @@ Critérios de aceitação:
 - filtro não diferencia maiúsculas e minúsculas;
 - sem termo mostra todos os pedidos.
 
-### Issue 071 - Ordenação Do Histórico
+### requisito 071 - Ordenação Do Histórico
 
 Adicionar ordenação por data e total.
 
@@ -785,7 +785,7 @@ Critérios de aceitação:
 - usuário ordena por total;
 - ordenação funciona com filtro aplicado.
 
-### Issue 072 - Testes Do Histórico
+### requisito 072 - Testes Do Histórico
 
 Criar testes para histórico de pedidos.
 
@@ -797,7 +797,7 @@ Critérios de aceitação:
 
 ## Módulo 25 - Repetir Compra
 
-### Issue 073 - Botão Repetir Compra
+### requisito 073 - Botão Repetir Compra
 
 Adicionar botão para repetir um pedido anterior.
 
@@ -807,7 +807,7 @@ Critérios de aceitação:
 - itens do pedido sao adicionados ao carrinho;
 - quantidades sao preservadas quando ha estoque.
 
-### Issue 074 - Tratar Falta De Estoque Ao Repetir
+### requisito 074 - Tratar Falta De Estoque Ao Repetir
 
 Tratar produtos sem estoque suficiente ao repetir compra.
 
@@ -817,7 +817,7 @@ Critérios de aceitação:
 - usuário recebe aviso;
 - itens disponiveis continuam no carrinho.
 
-### Issue 075 - Testes De Repetir Compra
+### requisito 075 - Testes De Repetir Compra
 
 Criar testes para repetir compra.
 
@@ -829,7 +829,7 @@ Critérios de aceitação:
 
 ## Módulo 26 - Baixa Automática De Estoque
 
-### Issue 076 - Confirmar Baixa No Checkout
+### requisito 076 - Confirmar Baixa No Checkout
 
 Garantir baixa de estoque ao finalizar compra.
 
@@ -839,7 +839,7 @@ Critérios de aceitação:
 - pedido registra itens comprados;
 - estoque não muda se checkout falhar.
 
-### Issue 077 - Exibir Estoque Atual Apos Compra
+### requisito 077 - Exibir Estoque Atual Apos Compra
 
 Atualizar catálogo com estoque reduzido após compra.
 
@@ -849,7 +849,7 @@ Critérios de aceitação:
 - produto pode ficar esgotado;
 - usuário não ve estoque antigo após finalizar.
 
-### Issue 078 - Testes De Baixa De Estoque
+### requisito 078 - Testes De Baixa De Estoque
 
 Criar testes para baixa automática.
 
@@ -861,7 +861,7 @@ Critérios de aceitação:
 
 ## Módulo 27 - Bloqueio De Estoque Negativo
 
-### Issue 079 - Bloquear Estoque Negativo
+### requisito 079 - Bloquear Estoque Negativo
 
 Impedir que qualquer fluxo gere estoque negativo.
 
@@ -871,7 +871,7 @@ Critérios de aceitação:
 - estoque nunca fica menor que zero;
 - mensagem informa o problema.
 
-### Issue 080 - Validação Na API
+### requisito 080 - Validação Na API
 
 Adicionar validação de estoque na criação de pedido via API.
 
@@ -881,7 +881,7 @@ Critérios de aceitação:
 - API retorna status adequado;
 - resposta contém mensagem clara.
 
-### Issue 081 - Testes De Estoque Negativo
+### requisito 081 - Testes De Estoque Negativo
 
 Criar testes contra estoque negativo.
 
@@ -893,7 +893,7 @@ Critérios de aceitação:
 
 ## Módulo 28 - Reposição De Estoque
 
-### Issue 082 - Tela De Reposição
+### requisito 082 - Tela De Reposição
 
 Criar tela simples para repor estoque de produto.
 
@@ -903,7 +903,7 @@ Critérios de aceitação:
 - usuário informa quantidade;
 - estoque aumenta após confirmar.
 
-### Issue 083 - Registrar Movimento De Reposição
+### requisito 083 - Registrar Movimento De Reposição
 
 Registrar movimentação de estoque para reposicoes.
 
@@ -913,7 +913,7 @@ Critérios de aceitação:
 - movimento registra produto e quantidade;
 - dados aparecem em consulta interna ou página da feature.
 
-### Issue 084 - Testes De Reposição
+### requisito 084 - Testes De Reposição
 
 Criar testes para reposição de estoque.
 
@@ -925,7 +925,7 @@ Critérios de aceitação:
 
 ## Módulo 29 - Movimentações De Estoque
 
-### Issue 085 - Listar Movimentações
+### requisito 085 - Listar Movimentações
 
 Criar página para listar movimentações de estoque.
 
@@ -935,7 +935,7 @@ Critérios de aceitação:
 - movimentações aparecem em ordem recente;
 - página lida com lista vazia.
 
-### Issue 086 - Filtrar Movimentações Por Produto
+### requisito 086 - Filtrar Movimentações Por Produto
 
 Adicionar filtro por produto na lista de movimentações.
 
@@ -945,7 +945,7 @@ Critérios de aceitação:
 - lista exibe apenas movimentos do produto;
 - filtro vazio mostra todos.
 
-### Issue 087 - Testes De Movimentações
+### requisito 087 - Testes De Movimentações
 
 Criar testes para movimentações.
 
@@ -957,7 +957,7 @@ Critérios de aceitação:
 
 ## Módulo 30 - Favoritos
 
-### Issue 088 - Marcar Produto Como Favorito
+### requisito 088 - Marcar Produto Como Favorito
 
 Permitir marcar produto como favorito.
 
@@ -967,7 +967,7 @@ Critérios de aceitação:
 - favorito fica salvo na sessao ou tabela da feature;
 - usuário visualiza estado favoritado.
 
-### Issue 089 - Filtro De Favoritos
+### requisito 089 - Filtro De Favoritos
 
 Criar tela ou filtro para produtos favoritos.
 
@@ -977,7 +977,7 @@ Critérios de aceitação:
 - usuário consegue remover favorito;
 - lista vazia mostra mensagem amigável.
 
-### Issue 090 - Testes De Favoritos
+### requisito 090 - Testes De Favoritos
 
 Criar testes para favoritos.
 
@@ -989,7 +989,7 @@ Critérios de aceitação:
 
 ## Módulo 31 - Vistos Recentemente
 
-### Issue 091 - Registrar Produto Visto
+### requisito 091 - Registrar Produto Visto
 
 Registrar produtos acessados recentemente.
 
@@ -999,7 +999,7 @@ Critérios de aceitação:
 - lista preserva ordem do mais recente;
 - produtos repetidos não duplicam.
 
-### Issue 092 - Exibir Vistos Recentemente
+### requisito 092 - Exibir Vistos Recentemente
 
 Exibir lista de vistos recentemente.
 
@@ -1009,7 +1009,7 @@ Critérios de aceitação:
 - lista possui limité documentado;
 - item da lista leva ao produto.
 
-### Issue 093 - Testes De Vistos Recentemente
+### requisito 093 - Testes De Vistos Recentemente
 
 Criar testes para vistos recentemente.
 
@@ -1021,7 +1021,7 @@ Critérios de aceitação:
 
 ## Módulo 32 - Total Gasto Por Cliente
 
-### Issue 094 - Calcular Total Gasto
+### requisito 094 - Calcular Total Gasto
 
 Calcular total gasto por cliente com base nos pedidos.
 
@@ -1031,7 +1031,7 @@ Critérios de aceitação:
 - cliente sem pedidos mostra zero;
 - calculo considera total dos pedidos.
 
-### Issue 095 - Exibir Ranking De Clientes
+### requisito 095 - Exibir Ranking De Clientes
 
 Criar página de ranking por total gasto.
 
@@ -1041,7 +1041,7 @@ Critérios de aceitação:
 - ranking ordena do maior para o menor;
 - lista vazia mostra mensagem amigável.
 
-### Issue 096 - Testes De Total Gasto
+### requisito 096 - Testes De Total Gasto
 
 Criar testes para total gasto por cliente.
 
@@ -1053,7 +1053,7 @@ Critérios de aceitação:
 
 ## Módulo 33 - Ultima Compra Do Cliente
 
-### Issue 097 - Identificar Ultima Compra
+### requisito 097 - Identificar Ultima Compra
 
 Identificar a ultima compra de cada cliente.
 
@@ -1063,7 +1063,7 @@ Critérios de aceitação:
 - cliente sem pedidos mostra estado vazio;
 - regra usa pedido mais recente.
 
-### Issue 098 - Exibir Ultima Compra No Histórico
+### requisito 098 - Exibir Ultima Compra No Histórico
 
 Exibir ultima compra em uma página ou bloco da feature.
 
@@ -1073,7 +1073,7 @@ Critérios de aceitação:
 - mostra data e total da ultima compra;
 - permite acessar o pedido relacionado.
 
-### Issue 099 - Testes De Ultima Compra
+### requisito 099 - Testes De Ultima Compra
 
 Criar testes para ultima compra.
 
@@ -1085,7 +1085,7 @@ Critérios de aceitação:
 
 ## Módulo 34 - Health Check Avancado
 
-### Issue 100 - Endpoint De Health Detalhado
+### requisito 100 - Endpoint De Health Detalhado
 
 Criar endpoint de health detalhado da feature.
 
@@ -1095,7 +1095,7 @@ Critérios de aceitação:
 - endpoint retorna versão;
 - endpoint retorna horario da resposta.
 
-### Issue 101 - Health Do Banco
+### requisito 101 - Health Do Banco
 
 Adicionar verificação simples de banco no health detalhado.
 
@@ -1105,7 +1105,7 @@ Critérios de aceitação:
 - resposta indica banco ok ou falha;
 - falha retorna status adequado.
 
-### Issue 102 - Testes De Health Avancado
+### requisito 102 - Testes De Health Avancado
 
 Criar testes do health detalhado.
 
@@ -1117,7 +1117,7 @@ Critérios de aceitação:
 
 ## Módulo 35 - Readiness
 
-### Issue 103 - Endpoint Readiness
+### requisito 103 - Endpoint Readiness
 
 Criar endpoint de readiness especifico.
 
@@ -1127,7 +1127,7 @@ Critérios de aceitação:
 - endpoint usa formato JSON;
 - endpoint fica documentado no README da feature.
 
-### Issue 104 - Readiness Com Banco
+### requisito 104 - Readiness Com Banco
 
 Readiness deve considerar acesso ao banco.
 
@@ -1137,7 +1137,7 @@ Critérios de aceitação:
 - banco indisponível retorna not ready;
 - status HTTP reflete o estado.
 
-### Issue 105 - Testes De Readiness
+### requisito 105 - Testes De Readiness
 
 Criar testes para readiness.
 
@@ -1149,7 +1149,7 @@ Critérios de aceitação:
 
 ## Módulo 36 - Versionamento Da Aplicação
 
-### Issue 106 - Endpoint De Versão
+### requisito 106 - Endpoint De Versão
 
 Criar endpoint para retornar versão da aplicação.
 
@@ -1159,7 +1159,7 @@ Critérios de aceitação:
 - endpoint retorna `COMMIT_SHA`;
 - endpoint usa JSON.
 
-### Issue 107 - Exibir Versão No Rodape
+### requisito 107 - Exibir Versão No Rodape
 
 Exibir versão da aplicação no frontend.
 
@@ -1169,7 +1169,7 @@ Critérios de aceitação:
 - commit aparece quando configurado;
 - ausencia de variavel usa valor local.
 
-### Issue 108 - Testes De Versão
+### requisito 108 - Testes De Versão
 
 Criar testes para versionamento.
 
@@ -1181,7 +1181,7 @@ Critérios de aceitação:
 
 ## Módulo 37 - Request ID
 
-### Issue 109 - Gerar Request ID
+### requisito 109 - Gerar Request ID
 
 Gerar identificador único para cada requisição.
 
@@ -1191,7 +1191,7 @@ Critérios de aceitação:
 - id aparece no header de resposta;
 - id pode ser reutilizado se cliente enviar header.
 
-### Issue 110 - Exibir Request ID Em Erros
+### requisito 110 - Exibir Request ID Em Erros
 
 Incluir request id em respostas de erro.
 
@@ -1201,7 +1201,7 @@ Critérios de aceitação:
 - erro API retorna request id no JSON;
 - logs incluem request id.
 
-### Issue 111 - Testes De Request ID
+### requisito 111 - Testes De Request ID
 
 Criar testes para request id.
 
@@ -1213,7 +1213,7 @@ Critérios de aceitação:
 
 ## Módulo 38 - Métricas Simples
 
-### Issue 112 - Contador De Requisicoes
+### requisito 112 - Contador De Requisicoes
 
 Criar métrica simples de quantidade de requisições.
 
@@ -1223,7 +1223,7 @@ Critérios de aceitação:
 - endpoint de métricas retorna contador;
 - formato é documentado.
 
-### Issue 113 - Métricas Por Rota
+### requisito 113 - Métricas Por Rota
 
 Adicionar contagem por rota.
 
@@ -1233,7 +1233,7 @@ Critérios de aceitação:
 - métricas mostram quantidade por rota;
 - rotas desconhecidas não quebram métricas.
 
-### Issue 114 - Testes De Métricas
+### requisito 114 - Testes De Métricas
 
 Criar testes para métricas.
 
@@ -1245,7 +1245,7 @@ Critérios de aceitação:
 
 ## Módulo 39 - Logs De Auditoria
 
-### Issue 115 - Registrar Evento De Pedido
+### requisito 115 - Registrar Evento De Pedido
 
 Criar log de auditoria ao finalizar pedido.
 
@@ -1255,7 +1255,7 @@ Critérios de aceitação:
 - evento contém tipo, data e id do pedido;
 - evento pode ser consultado.
 
-### Issue 116 - Registrar Evento De Carrinho
+### requisito 116 - Registrar Evento De Carrinho
 
 Criar log de auditoria para acoes importantes do carrinho.
 
@@ -1265,7 +1265,7 @@ Critérios de aceitação:
 - remover produto gera evento;
 - limpar carrinho gera evento quando existir.
 
-### Issue 117 - Testes De Auditoria
+### requisito 117 - Testes De Auditoria
 
 Criar testes para logs de auditoria.
 
@@ -1277,7 +1277,7 @@ Critérios de aceitação:
 
 ## Módulo 40 - Acessibilidade E UX Básica
 
-### Issue 118 - Melhorar Labels De Formulários
+### requisito 118 - Melhorar Labels De Formulários
 
 Revisar formulários para garantir labels claros.
 
@@ -1287,7 +1287,7 @@ Critérios de aceitação:
 - botoes possuem texto claro;
 - mensagens de erro ficam proximas ao campo.
 
-### Issue 119 - Estados Vazios Amigaveis
+### requisito 119 - Estados Vazios Amigaveis
 
 Melhorar estados vazios do catálogo, carrinho e pedidos.
 
@@ -1297,7 +1297,7 @@ Critérios de aceitação:
 - pedidos vazios tem mensagem clara;
 - filtros sem resultado orientam o usuário.
 
-### Issue 120 - Testes De UX Básica
+### requisito 120 - Testes De UX Básica
 
 Criar testes para labels e estados vazios.
 
