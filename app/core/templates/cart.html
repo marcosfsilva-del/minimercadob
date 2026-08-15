@@ -43,6 +43,9 @@
       {% for slot in slot_renderers("CART_SUMMARY") %}
         {{ slot.renderer(items=items, total=total)|safe }}
       {% endfor %}
+      <form method="post" action="{{ url_for('web.clear_cart') }}">
+        <button class="secondary" type="submit">Limpar carrinho</button>
+      </form>
       <a class="button-link full" href="{{ url_for('web.checkout') }}">Finalizar compra</a>
     </aside>
   </section>
