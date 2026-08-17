@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.models import InventoryMovement, Order, OrderItem, Product
+from app.features.nome_obrigatorio_checkout.service import validate_customer_name
 
 
 def list_products(session: Session) -> list[Product]:
@@ -19,6 +20,11 @@ def create_order(
 ) -> Order:
     if not items:
         raise ValueError("Pedido precisa ter pelo menos um item.")
+
+    # Issue #43 (módulo 18): nome do cliente é obrigatório para persistir o
+    # pedido. Não existe slot de validação pré-persistência no registry de
+    # features, então a regra é chamada aqui, no único ponto que cria Order.
+    customer_name = validate_customer_name(customer_name)
 
     product_ids = [item["product_id"] for item in items]
     products = session.scalars(select(Product).where(Product.id.in_(product_ids))).all()
@@ -49,7 +55,7 @@ def create_order(
             )
         )
 
-    order = Order(customer_name=customer_name or None, total=total, items=order_items)
+    order = Order(customer_name=customer_name, total=total, items=order_items)
     session.add(order)
 
     for item in items:

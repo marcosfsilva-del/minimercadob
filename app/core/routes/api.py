@@ -50,5 +50,8 @@ def create_order_api():
         for item in data.get("items", [])
     ]
     with session_scope() as db:
-        order = create_order(db, items, data.get("customerName"))
+        try:
+            order = create_order(db, items, data.get("customerName"))
+        except ValueError as error:
+            return jsonify({"error": str(error)}), 400
         return jsonify(order_to_dict(order)), 201

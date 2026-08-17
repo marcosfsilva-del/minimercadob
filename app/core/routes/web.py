@@ -84,7 +84,11 @@ def finish_checkout():
         payload = [
             {"product_id": item["product"].id, "quantity": item["quantity"]} for item in items
         ]
-        create_order(db, payload, request.form.get("customer_name"))
+        try:
+            create_order(db, payload, request.form.get("customer_name"))
+        except ValueError as error:
+            flash(str(error))
+            return redirect(url_for("web.checkout"))
 
     session["cart"] = {}
     flash("Pedido criado com sucesso.")
