@@ -12,7 +12,14 @@
   <form method="post" action="{{ url_for('web.finish_checkout') }}" class="stack">
     <label>
       Nome do cliente
-      <input type="text" name="customer_name" placeholder="Nome completo" required>
+      <input
+        type="text"
+        name="customer_name"
+        placeholder="Nome completo"
+        minlength="3"
+        maxlength="60"
+        required
+      >
     </label>
     <div class="summary-line">
       <span>Itens</span>

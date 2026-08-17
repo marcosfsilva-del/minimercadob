@@ -16,3 +16,13 @@ def test_validate_customer_name_rejects_empty():
 
 def test_validate_customer_name_strips_and_accepts_valid_name():
     assert validate_customer_name("  Maria Silva  ") == "Maria Silva"
+
+
+def test_validate_customer_name_rejects_too_short():
+    with pytest.raises(ValueError, match="muito curto"):
+        validate_customer_name("Al")
+
+
+def test_validate_customer_name_rejects_too_long():
+    with pytest.raises(ValueError, match="muito longo"):
+        validate_customer_name("A" * 61)
