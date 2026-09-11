@@ -3,8 +3,20 @@
 {% block content %}
 <section class="page-title">
   <div>
-    <h2>Regra Leve3 Pague2</h2>
-    <p>Feature em desenvolvimento.</p>
+    <h2>Leve {{ levar }}, Pague {{ pagar }}</h2>
+    <p>Promocao ativa para a categoria <strong>{{ categoria }}</strong>.</p>
   </div>
 </section>
+
+<article class="panel">
+  <h3>Como a regra funciona</h3>
+  <ul>
+    <li>A cada grupo de {{ levar }} unidades do mesmo produto da categoria
+      <strong>{{ categoria }}</strong>, {{ levar - pagar }} unidade sai de graca.</li>
+    <li>Quantidade menor que {{ levar }} nao recebe desconto.</li>
+    <li>Com 6 unidades o desconto e aplicado duas vezes.</li>
+    <li>Produtos de outras categorias nao entram na promocao.</li>
+  </ul>
+  <p class="muted">Consulta em formato JSON: <code>/regra-leve3-pague2/api</code></p>
+</article>
 {% endblock %}
