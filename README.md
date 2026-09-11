@@ -7,11 +7,9 @@ O frontend usa Flask + Jinja. O backend usa Flask API. O banco é SQLite com SQL
 ## Primeira execução
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -r requirements-dev.txt
-python3 tasks.py db-seed
-python3 tasks.py dev
+python -m pip install -r requirements-dev.txt
+python tasks.py db-seed
+python tasks.py dev
 ```
 
 Acesse `http://localhost:3000`.
@@ -19,12 +17,12 @@ Acesse `http://localhost:3000`.
 ## Comandos base para CI dos alunos
 
 ```bash
-python3 -m pip install -r requirements-dev.txt
-python3 tasks.py lint
-python3 tasks.py test
-python3 tasks.py build
-python3 tasks.py docker-build
-python3 tasks.py smoke
+python -m pip install -r requirements-dev.txt
+python tasks.py lint
+python tasks.py test
+python tasks.py build
+python tasks.py docker-build
+python tasks.py smoke
 ```
 
 O comando `build` em Python faz uma construção/validação com `compileall`, garantindo que o código importa e compila para bytecode. O Dockerfile também tem um stage `builder`.
@@ -44,11 +42,11 @@ PORT=3101 docker compose up --build
 ## Features
 
 ```bash
-python3 tasks.py feature-create product-search
-python3 tasks.py feature-check product-search
+python tasks.py feature-create product-search
+python tasks.py feature-check product-search
 ```
 
-Cada feature fica em um pacote Python. Slugs com hifen viram pasta com underscore.
+Cada feature fica em um pacote Python. Slugs com hífen viram pasta com underscore.
 
 ```text
 app/features/product_search/
