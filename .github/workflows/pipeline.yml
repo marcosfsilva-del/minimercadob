@@ -20,3 +20,6 @@ jobs:
 
       - name: lint com ruff
         run: python -m ruff check .
+
+      - name: testes com pytest
+        run: python -m pytest -v
