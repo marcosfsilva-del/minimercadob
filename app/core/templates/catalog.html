@@ -7,6 +7,17 @@
     <p>Produtos iniciais para as features da turma evoluírem.</p>
   </div>
   <div class="toolbar">
+    <form method="get" action="{{ url_for('web.catalog') }}">
+      <label for="search-term">Buscar produto</label>
+      <input
+        id="search-term"
+        name="q"
+        type="search"
+        placeholder="Digite um termo"
+        value="{{ search_term or '' }}"
+      />
+      <button type="submit">Buscar</button>
+    </form>
     {% for slot in slot_renderers("PRODUCT_LIST_TOOLBAR") %}
       {{ slot.renderer(products=products)|safe }}
     {% endfor %}
