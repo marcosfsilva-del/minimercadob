@@ -23,9 +23,19 @@ def _cart_items(products):
 
 @web_bp.get("/")
 def catalog():
+    search_term = request.args.get("q", "").strip()
     with session_scope() as db:
         products = list_products(db)
-    return render_template("catalog.html", products=products)
+    if search_term:
+        lowered_search_term = search_term.lower()
+        products = [
+            product
+            for product in products
+            if lowered_search_term in product.name.lower()
+            or lowered_search_term in product.description.lower()
+            or lowered_search_term in product.category.lower()
+        ]
+    return render_template("catalog.html", products=products, search_term=search_term)
 
 
 @web_bp.post("/cart/add/<int:product_id>")
