@@ -1,0 +1,5 @@
+<label for="cpf">cpf</label>
+<input id="cpf" name="cpf" type="text" inputmode="numeric" maxlength="14"
+       placeholder="000.000.000-00" required aria-describedby="ajuda-cpf"
+       value="{{ request.form.get('cpf', '') }}">
+<small id="ajuda-cpf">digite os 11 números, com ou sem pontuação.</small>
