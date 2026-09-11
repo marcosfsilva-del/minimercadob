@@ -13,6 +13,19 @@ Promocao "leve 3, pague 2" do DevOps Market.
 
 Para mudar a categoria da promocao, basta alterar `CATEGORIA_PROMOCIONAL` em `service.py`.
 
+## Onde a economia aparece
+
+A feature nao altera `app/core/*`. Ela se liga ao carrinho e ao checkout pelos slots do registry:
+
+| Slot | Renderer | O que mostra |
+| --- | --- | --- |
+| `CART_SUMMARY` | `resumo_economia` | valor economizado, total com desconto e detalhe por produto |
+| `CHECKOUT_FORM` | `resumo_economia` | mesmo resumo na tela de checkout |
+| `CART_ITEM` | `selo_item` | selo com as unidades gratis daquele item |
+
+Os dois renderers devolvem string vazia quando a regra nao se aplica, entao a
+mensagem so aparece quando existe desconto real.
+
 ## Rotas
 
 | Rota | Descricao |
@@ -33,3 +46,4 @@ Para mudar a categoria da promocao, basta alterar `CATEGORIA_PROMOCIONAL` em `se
 ## Issues
 
 - #41 - requisito 046 - Regra Leve 3 Pague 2
+- #48 - requisito 047 - Exibir Economia Da Promocao

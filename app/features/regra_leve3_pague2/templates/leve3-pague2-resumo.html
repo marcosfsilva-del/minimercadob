@@ -1,0 +1,10 @@
+<div class="panel">
+  <p><strong>{{ promocao.regra }}</strong> — categoria {{ promocao.categoria }}</p>
+  <p>Voce economizou <strong>{{ promocao.economia|brl }}</strong></p>
+  <p class="total">Total com desconto: {{ promocao.total_final|brl }}</p>
+  <ul class="muted">
+    {% for item in promocao.itens_com_desconto %}
+      <li>{{ item.produto }}: {{ item.unidades_gratuitas }} unidade(s) gratis ({{ item.desconto|brl }})</li>
+    {% endfor %}
+  </ul>
+</div>
