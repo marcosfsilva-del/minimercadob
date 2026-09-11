@@ -43,7 +43,18 @@ mensagem so aparece quando existe desconto real.
 | `desconto_do_item(preco, qtd)` | valor economizado no item |
 | `calcular_promocao(itens)` | total sem desconto, economia, total final e itens afetados |
 
+## Testes
+
+```bash
+python3 -m pytest app/features/regra_leve3_pague2 -v
+```
+
+Cobrem os tres cenarios exigidos (2 itens sem desconto, 3 itens com um desconto,
+6 itens com dois descontos), alem de categoria nao elegivel, total final com
+economia e exibicao condicional da mensagem.
+
 ## Issues
 
 - #41 - requisito 046 - Regra Leve 3 Pague 2
 - #48 - requisito 047 - Exibir Economia Da Promocao
+- #50 - requisito 048 - Testes Leve 3 Pague 2
