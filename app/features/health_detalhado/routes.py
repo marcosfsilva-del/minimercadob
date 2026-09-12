@@ -12,4 +12,5 @@ health_detalhado_bp = Blueprint(
 @health_detalhado_bp.get("/detailed")
 def detailed():
     payload = get_detailed_health()
-    return jsonify(payload)
+    status_code = 200 if payload["status"] == "ok" else 503
+    return jsonify(payload), status_code
