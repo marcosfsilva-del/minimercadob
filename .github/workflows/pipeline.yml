@@ -9,8 +9,8 @@ steps:
     uses: actions/checkout@v6
   - name: Configurar Python
     uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
+    with:
+      python-version: "3.12"
   - name: Instalar dependencias
     run: python -m pip install -r requirements-dev.txt
    - name: Lint com Ruff
