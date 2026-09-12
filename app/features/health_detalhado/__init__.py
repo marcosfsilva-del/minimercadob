@@ -1,0 +1,1 @@
+"""Feature de health detalhado."""
