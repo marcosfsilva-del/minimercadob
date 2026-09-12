@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,3 +21,20 @@ jobs:
 
       - name: Lint com Ruff
         run: python -m ruff check .
+  teste_unitario:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Testes com Pytest
+        run: python -m pytest -v
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Build com compileall
+        run: python -m compileall -q app scripts tasks.py        
