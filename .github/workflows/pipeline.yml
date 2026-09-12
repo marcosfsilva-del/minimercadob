@@ -24,3 +24,6 @@ jobs:
 
       - name: Testes com Pytest
         run: python -m pytest -v
+
+      - name: Build com compileall
+        run: python -m compileall -q app scripts tasks.py
