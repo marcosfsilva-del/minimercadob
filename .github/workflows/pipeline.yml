@@ -3,7 +3,7 @@ on:
   push:
 jobs:
   ci:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 steps:
   - name: Baixar codigo
     uses: actions/checkout@v6
