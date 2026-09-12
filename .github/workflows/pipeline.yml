@@ -21,6 +21,7 @@ jobs:
 
       - name: Lint com Ruff
         run: python -m ruff check .
+
   teste_unitario:
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +31,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
 
 
       - name: Testes com Pytest
@@ -44,6 +47,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
 
 
       - name: Build com compileall
