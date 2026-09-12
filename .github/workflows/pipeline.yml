@@ -26,6 +26,11 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v6
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
 
       - name: Testes com Pytest
         run: python -m pytest -v
@@ -35,6 +40,11 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v6
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py        
