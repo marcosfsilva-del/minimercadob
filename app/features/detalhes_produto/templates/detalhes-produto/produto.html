@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+  </div>
+  <div class="toolbar">
+    <a class="button-link" href="{{ url_for('web.catalog') }}">Voltar ao catálogo</a>
+  </div>
+</section>
+
+<section class="stack">
+  <article class="panel">
+    <div class="card-head">
+      <div>
+        <h3>Informações do produto</h3>
+        <p class="muted">Categoria: {{ product.category }}</p>
+      </div>
+      {% if product.promotional %}
+        <span class="badge">Promo</span>
+      {% endif %}
+    </div>
+    <p class="price">{{ product.price|brl }}</p>
+    <p class="muted">Estoque: {{ product.stock }} unidade(s)</p>
+  </article>
+</section>
+{% endblock %}

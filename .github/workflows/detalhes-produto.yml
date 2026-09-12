@@ -1,0 +1,39 @@
+name: CI detalhes-produto
+
+on:
+  push:
+    branches:
+      - "feature/56-pagina-de-detalhes"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: Lint, testes e build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Instalar dependencias
+        run: python3 -m pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: python3 tasks.py lint
+
+      - name: Preparar banco
+        run: python3 tasks.py db-seed
+
+      - name: Testes
+        run: python3 tasks.py test
+
+      - name: Build
+        run: python3 tasks.py build
