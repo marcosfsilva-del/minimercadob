@@ -76,10 +76,15 @@ def test_status_da_feature():
 def _cliente_com_produto_no_carrinho():
     """Prepara um cliente de teste com um produto real no carrinho.
 
-    Devolve o cliente e o produto usado, para os testes poderem conferir
-    o nome que deve aparecer na mensagem.
+    O teste NAO depende do banco ja estar populado: se nao houver nenhum
+    produto, ele cria o seu proprio. Isso torna o teste HERMETICO - ele
+    funciona tanto na maquina do desenvolvedor quanto no runner do
+    GitHub Actions, que nasce sempre com o banco vazio.
+
+    Devolve o cliente, o id e o nome do produto usado.
     """
     from app.core.database import session_scope
+    from app.core.models import Product
     from app.core.services.market_service import list_products
 
     app = create_app()
@@ -87,7 +92,22 @@ def _cliente_com_produto_no_carrinho():
 
     with app.app_context():
         with session_scope() as db:
-            produto = list_products(db)[0]
+            produtos = list_products(db)
+
+            # Runner limpo: nenhum produto cadastrado. Criamos um.
+            if not produtos:
+                produto = Product(
+                    name="Produto De Teste",
+                    description="Item criado pelo proprio teste.",
+                    category="Testes",
+                    price=10.0,
+                    stock=5,
+                )
+                db.add(produto)
+                db.flush()  # gera o id sem precisar fechar a transacao
+            else:
+                produto = produtos[0]
+
             produto_id = produto.id
             produto_nome = produto.name
 
