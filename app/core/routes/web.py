@@ -67,6 +67,12 @@ def remove_from_cart(product_id: int):
     return redirect(url_for("web.cart"))
 
 
+@web_bp.post("/cart/clear")
+def clear_cart():
+    session["cart"] = {}
+    return redirect(url_for("web.cart"))
+
+
 @web_bp.get("/checkout")
 def checkout():
     with session_scope() as db:
