@@ -3,8 +3,32 @@
 {% block content %}
 <section class="page-title">
   <div>
-    <h2>Confirmar Remocao</h2>
-    <p>Feature em desenvolvimento.</p>
+    <h2>Confirmar remoção</h2>
+    <p>Esta ação remove o produto do seu carrinho.</p>
   </div>
 </section>
+
+<article class="panel">
+  <p>
+    Tem certeza que deseja remover
+    <strong>{{ produto.name }}</strong>
+    do carrinho?
+  </p>
+
+  <div class="quantity-row">
+    {# CANCELAR: apenas um link de volta ao carrinho.
+       Nao dispara nenhuma acao, entao o item permanece intacto. #}
+    <a class="button-link" href="{{ url_for('web.cart') }}"
+       data-testid="botao-cancelar">Cancelar</a>
+
+    {# CONFIRMAR: formulario POST para a rota que remove de fato.
+       Usar POST e nao GET e proposital: acoes que alteram estado nao
+       devem acontecer por simples navegacao. #}
+    <form method="post"
+          action="{{ url_for('confirmar_remocao.remover', product_id=produto.id) }}">
+      <button class="secondary" type="submit"
+              data-testid="botao-confirmar">Confirmar remoção</button>
+    </form>
+  </div>
+</article>
 {% endblock %}
