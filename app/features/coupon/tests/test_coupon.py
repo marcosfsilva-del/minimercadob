@@ -1,3 +1,4 @@
+import pytest
 from flask import session
 
 from app.core import create_app
@@ -84,3 +85,26 @@ def test_cart_summary_shows_discount_and_final_total():
     assert "R$ 10,00" in html
     assert "Total final" in html
     assert "R$ 90,00" in html
+
+
+@pytest.mark.parametrize("code", ["DEVOPS10", "devops10", " DevOps10 "])
+def test_valid_coupon_variations(code):
+    assert apply_coupon(100.0, code) == {"discount": 10.0, "total": 90.0}
+
+
+@pytest.mark.parametrize("code", ["", None, "XPTO", "DEVOPS", "DEVOPS100", "DEVOPS 10"])
+def test_invalid_coupon_variations(code):
+    assert apply_coupon(100.0, code) == {"discount": 0.0, "total": 100.0}
+
+
+@pytest.mark.parametrize(
+    ("total", "discount", "final_total"),
+    [
+        (100.0, 10.0, 90.0),
+        (24.90, 2.49, 22.41),
+        (59.97, 6.0, 53.97),
+        (0.0, 0.0, 0.0),
+    ],
+)
+def test_total_with_discount(total, discount, final_total):
+    assert apply_coupon(total, "DEVOPS10") == {"discount": discount, "total": final_total}
