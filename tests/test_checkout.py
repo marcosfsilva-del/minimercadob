@@ -2,8 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.core import create_app
-from app.core import database
+from app.core import create_app, database
 from app.core.models import Order, Product
 
 
