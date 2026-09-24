@@ -4,7 +4,29 @@
 <section class="page-title">
   <div>
     <h2>Desconto Por Categoria</h2>
-    <p>Feature em desenvolvimento.</p>
+    <p>Produtos da categoria <strong>{{ rule.category }}</strong> recebem
+      {{ rule.percent }}% de desconto. As demais categorias mantêm o preço original.</p>
   </div>
 </section>
+
+<article class="panel">
+  <table>
+    <thead>
+      <tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Preço final</th></tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.category }}</td>
+        <td>R$ {{ "%.2f"|format(row.price) }}</td>
+        <td>
+          R$ {{ "%.2f"|format(row.final_price) }}
+          {% if row.has_discount %}<span class="badge">-{{ rule.percent }}%</span>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</article>
 {% endblock %}

@@ -5,6 +5,8 @@ manifest = FeatureManifest(
     id="desconto-por-categoria",
     name="Desconto Por Categoria",
     blueprint=bp,
-    menu=MenuItem(label="Desconto Por Categoria", endpoint="desconto_por_categoria.page", order=50),
+    menu=MenuItem(
+        label="Desconto Por Categoria", endpoint="desconto_por_categoria.page", order=50
+    ),
     slots=[],
 )
