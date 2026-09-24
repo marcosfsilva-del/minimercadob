@@ -16,9 +16,18 @@ def create_order(
     session: Session,
     items: list[dict[str, int]],
     customer_name: str | None = None,
+    delivery_method: str = "retirada",
+    delivery_address: str | None = None,
 ) -> Order:
     if not items:
         raise ValueError("Pedido precisa ter pelo menos um item.")
+
+    if delivery_method not in {"retirada", "entrega"}:
+        raise ValueError("Forma de entrega inválida.")
+
+    normalized_address = delivery_address.strip() if delivery_address else None
+    if delivery_method == "entrega" and not normalized_address:
+        raise ValueError("Endereço é obrigatório para entrega.")
 
     product_ids = [item["product_id"] for item in items]
     products = session.scalars(select(Product).where(Product.id.in_(product_ids))).all()
@@ -49,7 +58,13 @@ def create_order(
             )
         )
 
-    order = Order(customer_name=customer_name or None, total=total, items=order_items)
+    order = Order(
+        customer_name=customer_name or None,
+        delivery_method=delivery_method,
+        delivery_address=normalized_address if delivery_method == "entrega" else None,
+        total=total,
+        items=order_items,
+    )
     session.add(order)
 
     for item in items:
@@ -79,6 +94,8 @@ def order_to_dict(order: Order) -> dict[str, object]:
     return {
         "id": order.id,
         "customerName": order.customer_name,
+        "deliveryMethod": order.delivery_method,
+        "deliveryAddress": order.delivery_address,
         "total": order.total,
         "createdAt": order.created_at.isoformat(),
         "items": [

@@ -49,6 +49,10 @@ class Order(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     customer_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    delivery_method: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="retirada"
+    )
+    delivery_address: Mapped[str | None] = mapped_column(String(255), nullable=True)
     total: Mapped[float] = mapped_column(Float, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
