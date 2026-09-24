@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.models import InventoryMovement, Order, OrderItem, Product
+from app.core.models import Customer, InventoryMovement, Order, OrderItem, Product
 
 
 def list_products(session: Session) -> list[Product]:
@@ -61,6 +61,18 @@ def create_order(
 
     session.flush()
     return order
+
+
+def total_spent_by_customer(session: Session, customer_id: int) -> float:
+    customer = session.get(Customer, customer_id)
+    if customer is None:
+        raise ValueError(f"Cliente não encontrado: {customer_id}")
+
+    orders = session.scalars(
+        select(Order).where(Order.customer_name == customer.name)
+    ).all()
+
+    return sum(order.total for order in orders)
 
 
 def product_to_dict(product: Product) -> dict[str, object]:
