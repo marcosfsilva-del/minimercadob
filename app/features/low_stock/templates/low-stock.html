@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Produtos com Estoque Baixo</h2>
+    <p>Produtos com quantidade igual ou inferior a 5 unidades.</p>
+  </div>
+  <div class="toolbar">
+    <a href="{{ url_for('web.catalog') }}" class="button-link">Voltar ao Catálogo</a>
+  </div>
+</section>
+
+{% if not products %}
+  <article class="panel">
+    <p>Nenhum produto com estoque baixo no momento.</p>
+  </article>
+{% else %}
+  <section class="product-grid">
+    {% for product in products %}
+      <article class="card">
+        <div class="card-head">
+          <div>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+          </div>
+          {% if product.promotional %}
+            <span class="badge">Promo</span>
+          {% endif %}
+        </div>
+        <p class="price">{{ product.price|brl }}</p>
+        <p class="muted">Categoria: {{ product.category }} | Estoque: <strong>{{ product.stock }}</strong></p>
+        <form method="post" action="{{ url_for('web.add_to_cart', product_id=product.id) }}">
+          <button type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar ao carrinho</button>
+        </form>
+      </article>
+    {% endfor %}
+  </section>
+{% endif %}
+{% endblock %}
