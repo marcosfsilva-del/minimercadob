@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,8 +22,40 @@ jobs:
       - name: Lint com Ruff
         run: python -m ruff check .
 
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
+
       - name: Testes com Pytest
         run: python -m pytest -v
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
