@@ -3,6 +3,7 @@ from flask import Flask
 from app.core.config import settings
 from app.core.database import init_database
 from app.core.feature_registry import registry
+from app.core.request_id import init_request_id
 from app.core.routes.api import api_bp
 from app.core.routes.web import web_bp
 
@@ -15,6 +16,7 @@ def create_app() -> Flask:
     )
     app.config["SECRET_KEY"] = settings.secret_key
 
+    init_request_id(app)
     init_database()
     registry.discover(include_example=False)
 
