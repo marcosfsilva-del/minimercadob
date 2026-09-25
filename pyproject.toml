@@ -5,7 +5,7 @@ description = "Mini mercado extensivel para disciplina de Integracao DevOps"
 requires-python = ">=3.10"
 dependencies = [
   "Flask==3.0.3",
-  "SQLAlchemy==2.0.36",
+  "SQLAlchemy==2.0.54",
   "python-dotenv==1.0.1",
   "waitress==3.0.2"
 ]

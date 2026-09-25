@@ -1,0 +1,60 @@
+name: "DevOps Market - CI Actions"
+
+on:
+  push:
+    branches: "main"
+  pull_request:
+
+jobs:    
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code for runner
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Execute lint
+        run: python -m ruff check .
+  test:
+    needs: "lint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code for runner
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: python -m pytest -v
+      
+  build:
+    needs: "test"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code for runner
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Build app
+        run: python -m compileall -q app scripts tasks.py
+      
