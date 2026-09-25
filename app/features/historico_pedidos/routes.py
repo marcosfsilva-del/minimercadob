@@ -1,6 +1,8 @@
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, request
 
-from app.features.historico_pedidos.service import status
+from app.core.database import session_scope
+from app.core.services.market_service import order_to_dict
+from app.features.historico_pedidos.service import buscar_historico
 
 bp = Blueprint(
     "historico_pedidos",
@@ -12,9 +14,15 @@ bp = Blueprint(
 
 @bp.get("")
 def page():
-    return render_template("historico-pedidos.html")
+    termo = request.args.get("cliente", "").strip()
+    with session_scope() as db:
+        pedidos = buscar_historico(db, termo)
+        return render_template("historico-pedidos.html", pedidos=pedidos, termo=termo)
 
 
 @bp.get("/api")
 def api():
-    return jsonify(status())
+    termo = request.args.get("cliente", "").strip()
+    with session_scope() as db:
+        pedidos = buscar_historico(db, termo)
+        return jsonify([order_to_dict(pedido) for pedido in pedidos])
