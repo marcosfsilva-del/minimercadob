@@ -41,6 +41,9 @@ jobs:
       - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
 
+      - name: Preparar banco
+        run: python tasks.py db-seed
+
       - name: Executar testes
         run: python -m pytest -v
 
