@@ -24,10 +24,20 @@ def test_validate_customer_name_strips_and_accepts_valid_name():
 
 
 def test_validate_customer_name_rejects_too_short():
+    """Issue #45: nome com menos de 3 caracteres (sem contar espaços) mostra erro."""
     with pytest.raises(ValueError, match="muito curto"):
         validate_customer_name("Al")
+    with pytest.raises(ValueError, match="muito curto"):
+        validate_customer_name("  Al  ")
 
 
 def test_validate_customer_name_rejects_too_long():
+    """Issue #45: nome com mais de 60 caracteres mostra erro."""
     with pytest.raises(ValueError, match="muito longo"):
         validate_customer_name("A" * 61)
+
+
+def test_validate_customer_name_accepts_names_within_limits():
+    """Issue #45: nomes com exatamente 3 e 60 caracteres são válidos e permitem finalizar."""
+    assert validate_customer_name("Ana") == "Ana"
+    assert validate_customer_name("A" * 60) == "A" * 60
