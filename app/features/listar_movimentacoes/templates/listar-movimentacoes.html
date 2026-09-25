@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Movimentações de Estoque</h2>
+    <p>Entradas e saídas de produtos, das mais recentes para as mais antigas.</p>
+  </div>
+</section>
+
+{% if not movements %}
+  <article class="panel">Nenhuma movimentação registrada ainda.</article>
+{% else %}
+  <article class="panel">
+    <table class="movements-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Tipo</th>
+          <th>Quantidade</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for movement in movements %}
+          <tr>
+            <td>{{ movement.product.name }}</td>
+            <td>{{ type_label(movement.type) }}</td>
+            <td>{{ movement.quantity }}</td>
+            <td>{{ movement.created_at.strftime("%d/%m/%Y %H:%M") }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </article>
+{% endif %}
+
+<style>
+  .movements-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .movements-table th,
+  .movements-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+</style>
+{% endblock %}
