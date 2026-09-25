@@ -1,6 +1,7 @@
 from app.core.models import Order, OrderItem, Product
 from app.features.repeat_order.service import add_items_to_cart, repeat_order_items, status
 
+
 def test_status():
     assert status() == {"feature": "repeat-order", "status": "ok"}
 
