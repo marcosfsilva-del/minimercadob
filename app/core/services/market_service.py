@@ -12,6 +12,10 @@ def list_orders(session: Session) -> list[Order]:
     return list(session.scalars(select(Order).order_by(Order.created_at.desc())))
 
 
+def get_order(session: Session, order_id: int) -> Order | None:
+    return session.get(Order, order_id)
+
+
 def create_order(
     session: Session,
     items: list[dict[str, int]],

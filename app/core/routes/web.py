@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 from app.core.database import session_scope
-from app.core.services.market_service import create_order, list_orders, list_products
+from app.core.services.market_service import create_order, get_order, list_orders, list_products
 
 web_bp = Blueprint("web", __name__)
 
@@ -96,3 +96,13 @@ def orders():
     with session_scope() as db:
         order_list = list_orders(db)
     return render_template("orders.html", orders=order_list)
+
+@web_bp.get("/orders/<int:order_id>")
+def order_detail(order_id: int):
+    with session_scope() as db:
+        order = get_order(db, order_id)
+
+    if order is None:
+        return "Pedido não encontrado", 404
+
+    return render_template("order_detail.html", order=order)

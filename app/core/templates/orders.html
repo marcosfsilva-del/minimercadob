@@ -17,8 +17,15 @@
     <article class="panel">
       <div class="card-head">
         <div>
-          <h3>Pedido #{{ order.id }}</h3>
-          <p class="muted">{{ order.customer_name or "Cliente não informado" }}</p>
+          <h3>
+  <a href="{{ url_for('web.order_detail', order_id=order.id) }}">
+    Pedido #{{ order.id }}
+  </a>
+</h3>
+<p class="muted">{{ order.customer_name or "Cliente não informado" }}</p>
+<p class="muted">
+  Última compra: {{ order.created_at.strftime("%d/%m/%Y %H:%M") }}
+</p>
         </div>
         <p class="price">{{ order.total|brl }}</p>
       </div>
