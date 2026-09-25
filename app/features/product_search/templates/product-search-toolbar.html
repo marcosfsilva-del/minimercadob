@@ -1,0 +1,37 @@
+<label for="product-search-input">Pesquisar produtos</label>
+<input
+  id="product-search-input"
+  type="search"
+  name="q"
+  placeholder="Nome ou descricao"
+  autocomplete="off"
+>
+<p id="product-search-empty" class="muted" hidden>Nenhum produto encontrado.</p>
+<script>
+  const initializeProductSearch = () => {
+    const input = document.getElementById("product-search-input");
+    const grid = document.querySelector(".product-grid");
+    const emptyState = document.getElementById("product-search-empty");
+    if (!input || !grid || !emptyState) return;
+
+    const cards = Array.from(grid.querySelectorAll(".card"));
+    const filterProducts = () => {
+      const query = input.value.trim().toLocaleLowerCase();
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const matches = !query || card.textContent.toLocaleLowerCase().includes(query);
+        card.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+      emptyState.hidden = visibleCount !== 0;
+    };
+
+    input.addEventListener("input", filterProducts);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeProductSearch);
+  } else {
+    initializeProductSearch();
+  }
+</script>
