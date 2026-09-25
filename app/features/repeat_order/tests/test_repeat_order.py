@@ -1,6 +1,5 @@
 from app.core.models import Order, OrderItem, Product
-from app.features.repeat_order.service import repeat_order_items, status
-
+from app.features.repeat_order.service import add_items_to_cart, repeat_order_items, status
 
 def test_status():
     assert status() == {"feature": "repeat-order", "status": "ok"}
@@ -35,3 +34,18 @@ def test_repetir_pedido_preserva_itens_e_quantidades():
         {"product_id": 1, "quantity": 2},
         {"product_id": 2, "quantity": 3},
     ]
+
+
+def test_itens_repetidos_entram_no_carrinho():
+    # Arrange: carrinho que ja tem 1 arroz
+    carrinho = {"1": 1}
+    itens = [
+        {"product_id": 1, "quantity": 2},
+        {"product_id": 2, "quantity": 3},
+    ]
+
+    # Act
+    resultado = add_items_to_cart(carrinho, itens)
+
+    # Assert: arroz somou (1 + 2) e feijao entrou com 3
+    assert resultado == {"1": 3, "2": 3}
