@@ -1,9 +1,9 @@
 import pytest
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, delete
 from sqlalchemy.orm import Session
 
 from app.core import create_app
-from app.core.database import Base, session_scope
+from app.core.database import Base, init_database, session_scope
 from app.core.models import Product
 from app.features.detalhes_produto.service import get_product
 
@@ -28,10 +28,22 @@ def db():
         yield session
 
 
-def primeiro_produto():
-    """Produto real do banco da aplicacao, usado nos testes de rota."""
+@pytest.fixture
+def product():
+    """Produto criado no banco da aplicacao para os testes de rota e removido ao final."""
+    init_database()
     with session_scope() as session:
-        return session.scalars(select(Product).order_by(Product.id)).first()
+        created = Product(
+            name="Feijao de teste",
+            description="Pacote de feijao carioca 1kg",
+            category="Mercearia",
+            price=8.49,
+            stock=12,
+        )
+        session.add(created)
+    yield created
+    with session_scope() as session:
+        session.execute(delete(Product).where(Product.id == created.id))
 
 
 def test_get_product_devolve_produto_existente(db):
@@ -46,10 +58,7 @@ def test_get_product_devolve_none_para_id_inexistente(db):
     assert get_product(db, 9999) is None
 
 
-def test_pagina_exibe_todos_os_campos_do_produto():
-    product = primeiro_produto()
-    assert product is not None, "Banco vazio. Rode: python3 tasks.py db-seed"
-
+def test_pagina_exibe_todos_os_campos_do_produto(product):
     response = create_app().test_client().get(f"/produto/{product.id}")
     body = response.data.decode()
 
@@ -67,10 +76,7 @@ def test_pagina_de_produto_inexistente_retorna_404():
     assert "não encontrado" in response.data.decode()
 
 
-def test_catalogo_exibe_link_para_os_detalhes():
-    product = primeiro_produto()
-    assert product is not None, "Banco vazio. Rode: python3 tasks.py db-seed"
-
+def test_catalogo_exibe_link_para_os_detalhes(product):
     response = create_app().test_client().get("/")
 
     assert f'href="/produto/{product.id}"' in response.data.decode()
