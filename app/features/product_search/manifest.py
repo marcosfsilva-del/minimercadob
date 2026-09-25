@@ -1,6 +1,5 @@
 from app.core.types.features import FeatureManifest, MenuItem, SlotContribution
-from app.features.product_search.routes import bp
-from app.features.product_search.routes import render_toolbar
+from app.features.product_search.routes import bp, render_toolbar
 
 manifest = FeatureManifest(
     id="product-search",
