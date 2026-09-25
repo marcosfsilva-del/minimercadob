@@ -11,35 +11,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install -r
-  requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
       - run: python -m ruff check .
 
-    test:
-      needs: lint
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v6
-        - uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-      - run: python -m pip install -r
-  requirements-dev.txt
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
       - run: python -m pytest -v  
 
-    build:
-      needs: test
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v6
-        - uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-      - run: python -m pip install -r
-         requirements-dev.txt
-      - run: python -m compileall -q app
-      scripts tasks.py
-
-
-
-   
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m compileall -q app scripts tasks.py
