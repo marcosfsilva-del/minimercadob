@@ -14,18 +14,33 @@ def _cart_items(products):
     cart = _cart()
     product_by_id = {str(product.id): product for product in products}
     items = []
+
     for product_id, quantity in cart.items():
         product = product_by_id.get(product_id)
+
         if product:
             items.append({"product": product, "quantity": quantity})
+
     return items
+
+
+def _favoritos() -> list[int]:
+    """Retorna a lista de produtos favoritos armazenada na sessão."""
+    return session.setdefault("favoritos", [])
 
 
 @web_bp.get("/")
 def catalog():
     with session_scope() as db:
         products = list_products(db)
-    return render_template("catalog.html", products=products)
+
+    favoritos = _favoritos()
+
+    return render_template(
+        "catalog.html",
+        products=products,
+        favoritos=favoritos,
+    )
 
 
 @web_bp.post("/cart/add/<int:product_id>")
@@ -42,8 +57,10 @@ def add_to_cart(product_id: int):
 def cart():
     with session_scope() as db:
         products = list_products(db)
+
     items = _cart_items(products)
     total = sum(item["product"].price * item["quantity"] for item in items)
+
     return render_template("cart.html", items=items, total=total)
 
 
@@ -52,10 +69,12 @@ def update_cart(product_id: int):
     quantity = max(0, int(request.form.get("quantity", "1")))
     cart = _cart()
     key = str(product_id)
+
     if quantity == 0:
         cart.pop(key, None)
     else:
         cart[key] = quantity
+
     session.modified = True
     return redirect(url_for("web.cart"))
 
@@ -71,8 +90,10 @@ def remove_from_cart(product_id: int):
 def checkout():
     with session_scope() as db:
         products = list_products(db)
+
     items = _cart_items(products)
     total = sum(item["product"].price * item["quantity"] for item in items)
+
     return render_template("checkout.html", items=items, total=total)
 
 
@@ -81,13 +102,20 @@ def finish_checkout():
     with session_scope() as db:
         products = list_products(db)
         items = _cart_items(products)
+
         payload = [
-            {"product_id": item["product"].id, "quantity": item["quantity"]} for item in items
+            {
+                "product_id": item["product"].id,
+                "quantity": item["quantity"],
+            }
+            for item in items
         ]
+
         create_order(db, payload, request.form.get("customer_name"))
 
     session["cart"] = {}
     flash("Pedido criado com sucesso.")
+
     return redirect(url_for("web.orders"))
 
 
@@ -95,4 +123,27 @@ def finish_checkout():
 def orders():
     with session_scope() as db:
         order_list = list_orders(db)
+
     return render_template("orders.html", orders=order_list)
+
+
+@web_bp.post("/favoritar/<int:produto_id>")
+def favoritar_produto(produto_id: int):
+    """
+    Requisito 088 - Marcar Produto Como Favorito.
+
+    Adiciona ou remove o produto da lista de favoritos armazenada
+    na sessão do usuário.
+    """
+    favoritos = _favoritos()
+
+    if produto_id in favoritos:
+        favoritos.remove(produto_id)
+        flash("Produto removido dos favoritos.")
+    else:
+        favoritos.append(produto_id)
+        flash("Produto adicionado aos favoritos.")
+
+    session.modified = True
+
+    return redirect(request.referrer or url_for("web.catalog"))
