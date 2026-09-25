@@ -1,31 +1,77 @@
 name: CI
 
-
 on:
   push:
 
 jobs:
-  ci:
+  install:
+    name: Instalar dependências
     runs-on: ubuntu-latest
-
-
     steps:
-      - name: Baixar codigo
-        uses: actions/checkout@v6
+      - name: Baixar código
+        uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Instalar dependencias
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
+
+  lint:
+    name: Lint com Ruff
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
         run: python -m pip install -r requirements-dev.txt
 
       - name: Lint com Ruff
         run: python -m ruff check .
 
+  test:
+    name: Testes com Pytest
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
+
       - name: Testes com Pytest
         run: python -m pytest -v
+
+  build:
+    name: Build com compileall
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
