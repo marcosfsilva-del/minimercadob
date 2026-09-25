@@ -1,0 +1,1 @@
+"""Feature: registra os produtos vistos recentemente pelo usuário."""

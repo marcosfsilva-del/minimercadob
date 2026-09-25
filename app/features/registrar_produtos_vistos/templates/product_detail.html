@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+  </div>
+  {% if product.promotional %}
+    <span class="badge">Promo</span>
+  {% endif %}
+</section>
+
+<section class="cart-layout">
+  <article class="panel">
+    <p class="price">{{ product.price|brl }}</p>
+    <p class="muted">Categoria: {{ product.category }} | Estoque: {{ product.stock }}</p>
+    <form method="post" action="{{ url_for('web.add_to_cart', product_id=product.id) }}">
+      <button type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar ao carrinho</button>
+    </form>
+  </article>
+
+  <aside class="summary">
+    <h3>Vistos recentemente</h3>
+    {% if recently_viewed %}
+      <ul class="recently-viewed-list">
+        {% for item in recently_viewed %}
+          <li>
+            <a href="{{ url_for('recently_viewed.product_detail', product_id=item.id) }}">{{ item.name }}</a>
+            <span class="muted">{{ item.price|brl }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Nenhum outro produto visto ainda.</p>
+    {% endif %}
+  </aside>
+</section>
+{% endblock %}
