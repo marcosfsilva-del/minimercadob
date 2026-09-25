@@ -16,3 +16,11 @@ def repeat_order_items(order: Order) -> list[dict[str, int]]:
         if item.quantity <= item.product.stock:
             items.append({"product_id": item.product_id, "quantity": item.quantity})
     return items
+
+
+def add_items_to_cart(cart: dict[str, int], items: list[dict[str, int]]) -> dict[str, int]:
+    """Adiciona os itens ao carrinho, somando com o que ja existe nele."""
+    for item in items:
+        key = str(item["product_id"])
+        cart[key] = cart.get(key, 0) + item["quantity"]
+    return cart

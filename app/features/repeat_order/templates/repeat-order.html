@@ -3,8 +3,31 @@
 {% block content %}
 <section class="page-title">
   <div>
-    <h2>Repeat Order</h2>
-    <p>Feature em desenvolvimento.</p>
+    <h2>Repetir compra</h2>
+    <p>Escolha um pedido anterior para colocar os mesmos itens no carrinho.</p>
   </div>
+</section>
+
+<section class="stack">
+  {% if not orders %}
+    <article class="panel">Nenhum pedido registrado ainda.</article>
+  {% endif %}
+
+  {% for order in orders %}
+    <article class="panel">
+      <div class="card-head">
+        <h3>Pedido #{{ order.id }}</h3>
+        <p class="price">{{ order.total|brl }}</p>
+      </div>
+      <ul>
+        {% for item in order.items %}
+          <li>{{ item.quantity }}x {{ item.product.name }}</li>
+        {% endfor %}
+      </ul>
+      <form method="post" action="{{ url_for('repeat_order.repeat', order_id=order.id) }}">
+        <button type="submit">Repetir compra</button>
+      </form>
+    </article>
+  {% endfor %}
 </section>
 {% endblock %}
