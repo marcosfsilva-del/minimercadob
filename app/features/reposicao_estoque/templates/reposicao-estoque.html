@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .reposicao-form label {
+    display: grid;
+    font-weight: 700;
+    gap: 6px;
+  }
+
+  .reposicao-form select {
+    border: 1px solid #cdd7c6;
+    border-radius: 6px;
+    font: inherit;
+    min-height: 40px;
+    padding: 8px 10px;
+  }
+</style>
+<section class="page-title">
+  <div>
+    <h2>Reposição de estoque</h2>
+    <p>Selecione o produto, informe a quantidade e confirme para aumentar o estoque.</p>
+  </div>
+</section>
+
+<article class="panel narrow">
+  {% if products %}
+    <form method="post" action="{{ url_for('reposicao_estoque.confirmar') }}" class="stack reposicao-form">
+      <label>
+        Produto
+        <select name="product_id" required>
+          {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }} (estoque: {{ product.stock }})</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Quantidade
+        <input type="number" name="quantity" min="1" step="1" required>
+      </label>
+      <button type="submit">Confirmar reposição</button>
+    </form>
+  {% else %}
+    <p>Nenhum produto cadastrado para repor.</p>
+  {% endif %}
+</article>
+
+<section class="stack">
+  <h2>Movimentos de reposição</h2>
+  {% if not movements %}
+    <article class="panel">Nenhuma reposição registrada.</article>
+  {% endif %}
+  {% for movement in movements %}
+    <article class="panel">
+      <h3>{{ movement.product.name }}</h3>
+      <p>Tipo: Reposição</p>
+      <p class="muted">Quantidade: {{ movement.quantity }}</p>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}
