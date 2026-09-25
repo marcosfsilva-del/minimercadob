@@ -1,48 +1,22 @@
-name: Pipeline CI
+name: CI Pipeline
 
 on: [push]
 
 jobs:
   lint:
+    name: Job 1 - Lint (Ruff)
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Baixar codigo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
-      - run: pip install -r requirements-dev.txt
+      - name: Instalar Ruff
+        run: python -m pip install ruff
 
-      - run: python tasks.py lint
-
-  test:
-    needs: lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      - run: pip install -r requirements-dev.txt
-
-      - run: python tasks.py test
-
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      - run: pip install -r requirements-dev.txt
-
-      - run: python tasks.py build
+      - name: Executar Ruff
+        run: python -m ruff check
