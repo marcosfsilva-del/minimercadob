@@ -1,7 +1,8 @@
 """Testes do Módulo 24, histórico de pedidos.
 
 Requisito 070, issue #57: o filtro por nome do cliente.
-Cada critério de aceitação da issue tem pelo menos um teste com o nome do critério.
+Requisito 071, issue #58: a ordenação por data e por total.
+Cada critério de aceitação tem pelo menos um teste com o nome do critério.
 """
 
 from datetime import datetime
@@ -15,8 +16,11 @@ from app.core.database import Base
 from app.core.models import Order
 from app.features.historico_pedidos import routes
 from app.features.historico_pedidos.service import (
+    ORDENACAO_PADRAO,
     buscar_historico,
     filtrar_por_cliente,
+    ordenacao_valida,
+    ordenar_pedidos,
     status,
 )
 
@@ -81,6 +85,36 @@ def test_pedido_sem_nome_so_aparece_quando_nao_ha_filtro(pedidos):
     assert 4 in numeros(filtrar_por_cliente(pedidos, ""))
 
 
+# ------------------------------------------------------------------ criterios da issue #58
+
+
+def test_ordena_por_data_mais_recente_primeiro(pedidos):
+    assert numeros(ordenar_pedidos(pedidos, "data_desc")) == [4, 2, 3, 1]
+
+
+def test_ordena_por_data_mais_antiga_primeiro(pedidos):
+    assert numeros(ordenar_pedidos(pedidos, "data_asc")) == [1, 3, 2, 4]
+
+
+def test_ordena_por_maior_total(pedidos):
+    assert numeros(ordenar_pedidos(pedidos, "total_desc")) == [3, 1, 4, 2]
+
+
+def test_ordena_por_menor_total(pedidos):
+    assert numeros(ordenar_pedidos(pedidos, "total_asc")) == [2, 4, 1, 3]
+
+
+@pytest.mark.parametrize("ordem", [None, "", "preco", "DATA_DESC"])
+def test_ordenacao_desconhecida_usa_a_padrao(pedidos, ordem):
+    assert ordenacao_valida(ordem) == ORDENACAO_PADRAO
+    assert ordenar_pedidos(pedidos, ordem) == ordenar_pedidos(pedidos, ORDENACAO_PADRAO)
+
+
+def test_empate_no_total_e_desempatado_pelo_numero_do_pedido():
+    empatados = [pedido(7, "X", 10.0, 1), pedido(5, "Y", 10.0, 2), pedido(6, "Z", 10.0, 3)]
+    assert numeros(ordenar_pedidos(empatados, "total_asc")) == [5, 6, 7]
+
+
 # ------------------------------------------------------------------ banco de dados
 
 
@@ -105,9 +139,9 @@ def test_buscar_historico_filtra_pedidos_do_banco(pedidos):
 def cliente_http(monkeypatch, pedidos):
     chamadas = []
 
-    def falso_buscar_historico(_session, termo):
-        chamadas.append(termo)
-        return filtrar_por_cliente(pedidos, termo)
+    def falso_buscar_historico(_session, termo, ordem):
+        chamadas.append((termo, ordem))
+        return ordenar_pedidos(filtrar_por_cliente(pedidos, termo), ordem)
 
     monkeypatch.setattr(routes, "buscar_historico", falso_buscar_historico)
     return create_app().test_client(), chamadas
@@ -119,7 +153,7 @@ def test_pagina_repassa_o_filtro_e_mostra_so_os_pedidos_do_cliente(cliente_http)
     resposta = client.get("/historico-pedidos?cliente=%20ana%20")
 
     assert resposta.status_code == 200
-    assert chamadas == ["ana"]
+    assert chamadas == [("ana", ORDENACAO_PADRAO)]
     corpo = resposta.data.decode()
     assert "Pedido #1" in corpo
     assert "Pedido #3" in corpo
@@ -140,4 +174,5 @@ def test_api_devolve_pedidos_filtrados(cliente_http):
     resposta = client.get("/historico-pedidos/api?cliente=ana")
 
     assert resposta.status_code == 200
-    assert [item["id"] for item in resposta.get_json()] == [1, 3]
+    # sem ordem informada, vale a padrao: mais recente primeiro
+    assert [item["id"] for item in resposta.get_json()] == [3, 1]

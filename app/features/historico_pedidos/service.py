@@ -5,12 +5,22 @@ Isso deixa a regra testável de forma isolada e mantém o core intocado: a consu
 ao banco continua sendo feita por ``list_orders``, do serviço do core.
 """
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from sqlalchemy.orm import Session
 
 from app.core.models import Order
 from app.core.services.market_service import list_orders
+
+ORDENACAO_PADRAO = "data_desc"
+
+# chave da ordenação: (rótulo exibido, função que extrai o valor, ordem decrescente)
+ORDENACOES: dict[str, tuple[str, Callable[[Order], object], bool]] = {
+    "data_desc": ("Mais recentes", lambda pedido: pedido.created_at, True),
+    "data_asc": ("Mais antigos", lambda pedido: pedido.created_at, False),
+    "total_desc": ("Maior total", lambda pedido: pedido.total, True),
+    "total_asc": ("Menor total", lambda pedido: pedido.total, False),
+}
 
 
 def status() -> dict[str, str]:
@@ -39,6 +49,32 @@ def filtrar_por_cliente(pedidos: Iterable[Order], termo: str | None) -> list[Ord
     ]
 
 
-def buscar_historico(session: Session, termo: str | None = None) -> list[Order]:
-    """Lista os pedidos do banco já filtrados pelo nome do cliente."""
-    return filtrar_por_cliente(list_orders(session), termo)
+def ordenacao_valida(ordem: str | None) -> str:
+    """Devolve a ordenação pedida, ou a padrão quando o valor é desconhecido."""
+    return ordem if ordem in ORDENACOES else ORDENACAO_PADRAO
+
+
+def ordenar_pedidos(pedidos: Iterable[Order], ordem: str | None) -> list[Order]:
+    """Ordena por data ou por total, no sentido indicado pela chave de ordenação.
+
+    O número do pedido desempata, para que pedidos com o mesmo valor apareçam
+    sempre na mesma sequência.
+    """
+    _, chave, decrescente = ORDENACOES[ordenacao_valida(ordem)]
+    return sorted(
+        pedidos,
+        key=lambda pedido: (chave(pedido), pedido.id or 0),
+        reverse=decrescente,
+    )
+
+
+def buscar_historico(
+    session: Session,
+    termo: str | None = None,
+    ordem: str | None = None,
+) -> list[Order]:
+    """Lista os pedidos do banco filtrados pelo cliente e depois ordenados.
+
+    O filtro é aplicado antes da ordenação, então as duas coisas funcionam juntas.
+    """
+    return ordenar_pedidos(filtrar_por_cliente(list_orders(session), termo), ordem)
