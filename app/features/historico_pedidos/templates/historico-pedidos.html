@@ -3,8 +3,59 @@
 {% block content %}
 <section class="page-title">
   <div>
-    <h2>Historico Pedidos</h2>
-    <p>Feature em desenvolvimento.</p>
+    <h2>Histórico de pedidos</h2>
+    <p>Consulte os pedidos filtrando pelo nome do cliente.</p>
   </div>
+</section>
+
+<form method="get" action="{{ url_for('historico_pedidos.page') }}" class="panel toolbar">
+  <label for="filtro-cliente" class="muted">Cliente</label>
+  <input
+    id="filtro-cliente"
+    type="search"
+    name="cliente"
+    value="{{ termo }}"
+    placeholder="Nome do cliente"
+  >
+  <button type="submit">Filtrar</button>
+  {% if termo %}
+    <a class="button-link" href="{{ url_for('historico_pedidos.page') }}">Limpar</a>
+  {% endif %}
+</form>
+
+<section class="stack">
+  {% if termo %}
+    <p class="muted">
+      {{ pedidos|length }} pedido(s) encontrado(s) para "{{ termo }}".
+    </p>
+  {% endif %}
+
+  {% if not pedidos %}
+    <article class="panel">
+      {% if termo %}
+        Nenhum pedido encontrado para este cliente.
+      {% else %}
+        Nenhum pedido registrado ainda.
+      {% endif %}
+    </article>
+  {% endif %}
+
+  {% for pedido in pedidos %}
+    <article class="panel">
+      <div class="card-head">
+        <div>
+          <h3>Pedido #{{ pedido.id }}</h3>
+          <p class="muted">{{ pedido.customer_name or "Cliente não informado" }}</p>
+          <p class="muted">{{ pedido.created_at.strftime("%d/%m/%Y %H:%M") }}</p>
+        </div>
+        <p class="price">{{ pedido.total|brl }}</p>
+      </div>
+      <ul>
+        {% for item in pedido.items %}
+          <li>{{ item.quantity }}x {{ item.product.name }} - {{ item.subtotal|brl }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+  {% endfor %}
 </section>
 {% endblock %}

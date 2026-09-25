@@ -18,9 +18,16 @@ por nome do cliente e ordenação por data e por total.
 
 ## Estado atual
 
-Estrutura inicial gerada com `python3 tasks.py feature-create historico-pedidos` e
-validada com `python3 tasks.py feature-check historico-pedidos`. A implementação dos
-requisitos acontece nas próximas etapas, uma issue por vez.
+| Requisito | Branch | Situação |
+|---|---|---|
+| 070, filtro | `feature/57-historico-pedidos` | implementado |
+| 071, ordenação | `feature/58-ordenacao-historico` | próxima etapa |
+| 072, testes | `feature/59-testes-historico` | próxima etapa |
+
+**070, filtro.** Campo "Cliente" na página. Busca por parte do nome, sem diferenciar
+maiúsculas e minúsculas. Termo vazio mostra todos os pedidos. A regra fica em `service.py`,
+na função `filtrar_por_cliente`, e a consulta ao banco reutiliza `list_orders`, do core,
+sem alterá-lo.
 
 ## Como rodar
 
@@ -29,5 +36,5 @@ python3 tasks.py db-seed
 python3 tasks.py dev
 ```
 
-A página fica em `http://localhost:3000/historico-pedidos` e o endpoint de status em
-`http://localhost:3000/historico-pedidos/api`.
+A página fica em `http://localhost:3000/historico-pedidos` e a API em
+`http://localhost:3000/historico-pedidos/api?cliente=ana`.
