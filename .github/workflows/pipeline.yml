@@ -39,3 +39,19 @@ jobs:
 
       - name: Executar Pytest
         run: python -m pytest -v
+
+  build:
+    name: Job 3 - Build (compileall)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Executar compileall
+        run: python -m compileall -q app scripts tasks.py
