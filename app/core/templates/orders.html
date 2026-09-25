@@ -20,7 +20,15 @@
           <h3>Pedido #{{ order.id }}</h3>
           <p class="muted">{{ order.customer_name or "Cliente não informado" }}</p>
         </div>
-        <p class="price">{{ order.total|brl }}</p>
+        <div>
+          <p class="price">{{ order.total|brl }}</p>
+          <p class="muted">
+            {{ "Retirada" if order.delivery_method == "retirada" else "Entrega" }}
+            {% if order.delivery_method == "entrega" and order.delivery_address %}
+              — {{ order.delivery_address }}
+            {% endif %}
+          </p>
+        </div>
       </div>
       <ul>
         {% for item in order.items %}

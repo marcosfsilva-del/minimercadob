@@ -50,5 +50,11 @@ def create_order_api():
         for item in data.get("items", [])
     ]
     with session_scope() as db:
-        order = create_order(db, items, data.get("customerName"))
+        order = create_order(
+            db,
+            items,
+            data.get("customerName"),
+            data.get("deliveryMethod", "retirada"),
+            data.get("deliveryAddress"),
+        )
         return jsonify(order_to_dict(order)), 201
