@@ -80,3 +80,65 @@ def test_catalogo_exibe_link_para_os_detalhes(product):
     response = create_app().test_client().get("/")
 
     assert f'href="/produto/{product.id}"' in response.data.decode()
+
+
+# Adicionar ao carrinho pela pagina de detalhes
+
+
+def test_pagina_de_detalhes_possui_botao_de_adicionar(product):
+    response = create_app().test_client().get(f"/produto/{product.id}")
+    body = response.data.decode()
+
+    assert f'action="/produto/{product.id}/adicionar"' in body
+    assert "Adicionar ao carrinho" in body
+
+
+def test_botao_adiciona_o_produto_correto():
+    client = create_app().test_client()
+    with session_scope() as session:
+        outro = Product(name="Outro", description="x", category="x", price=1.0, stock=5)
+        alvo = Product(name="Alvo", description="x", category="x", price=2.0, stock=5)
+        session.add_all([outro, alvo])
+    try:
+        client.post(f"/produto/{alvo.id}/adicionar")
+        client.post(f"/produto/{alvo.id}/adicionar")
+
+        with client.session_transaction() as flask_session:
+            assert flask_session["cart"] == {str(alvo.id): 2}
+    finally:
+        with session_scope() as session:
+            session.execute(delete(Product).where(Product.id.in_([outro.id, alvo.id])))
+
+
+def test_adicionar_volta_para_os_detalhes_sem_erro(product):
+    client = create_app().test_client()
+
+    response = client.post(f"/produto/{product.id}/adicionar", follow_redirects=True)
+
+    assert response.status_code == 200
+    assert response.request.path == f"/produto/{product.id}"
+    assert "adicionado ao carrinho" in response.data.decode()
+
+
+def test_adicionar_e_seguir_para_o_carrinho_sem_erro(product):
+    client = create_app().test_client()
+
+    response = client.post(
+        f"/produto/{product.id}/adicionar",
+        data={"destino": "carrinho"},
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+    assert response.request.path == "/cart"
+    assert product.name in response.data.decode()
+
+
+def test_adicionar_produto_inexistente_retorna_404_e_nao_altera_carrinho():
+    client = create_app().test_client()
+
+    response = client.post("/produto/999999/adicionar")
+
+    assert response.status_code == 404
+    with client.session_transaction() as flask_session:
+        assert flask_session.get("cart", {}) == {}

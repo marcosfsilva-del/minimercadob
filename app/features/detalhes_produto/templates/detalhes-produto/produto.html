@@ -8,6 +8,7 @@
   </div>
   <div class="toolbar">
     <a class="button-link" href="{{ url_for('web.catalog') }}">Voltar ao catálogo</a>
+    <a class="button-link" href="{{ url_for('web.cart') }}">Ir para o carrinho</a>
   </div>
 </section>
 
@@ -24,6 +25,10 @@
     </div>
     <p class="price">{{ product.price|brl }}</p>
     <p class="muted">Estoque: {{ product.stock }} unidade(s)</p>
+    <form method="post" action="{{ url_for('detalhes_produto.add_to_cart', product_id=product.id) }}">
+      <button type="submit" name="destino" value="detalhes" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar ao carrinho</button>
+      <button type="submit" name="destino" value="carrinho" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar e ir ao carrinho</button>
+    </form>
   </article>
 </section>
 {% endblock %}
