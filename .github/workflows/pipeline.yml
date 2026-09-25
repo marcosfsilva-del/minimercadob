@@ -2,7 +2,6 @@ name: "DevOps Market - CI Actions"
 
 on:
   push:
-    branches: "main"
   pull_request:
 
 jobs:    
