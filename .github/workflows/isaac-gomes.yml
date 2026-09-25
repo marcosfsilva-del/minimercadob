@@ -1,0 +1,122 @@
+# =============================================================================
+# PIPELINE DE CI (Integração Contínua) - Isaac Gomes - AP1 Entrega Contínua
+# Issues #43, #45 e #47 (nome do cliente no checkout)
+# -----------------------------------------------------------------------------
+# ONDE FICA: .github/workflows/isaac-gomes.yml
+#   O GitHub Actions só procura workflows na pasta .github/workflows/.
+#   O nome do arquivo segue o README do projeto: <nome-do-aluno-ou-feature>.yml
+#   O GitHub roda a versão deste arquivo que está NA BRANCH que recebeu o push.
+#   Por isso ele existe nas 3 branches (43, 45 e 47).
+#
+# FLUXO EM FILA:   lint  --->  test  --->  build
+#   Cada seta é um "needs". Se um job falha, os seguintes ficam "skipped".
+#
+# COMANDOS: os "comandos base para CI" do README (python tasks.py ...).
+# =============================================================================
+
+# name: nome do workflow, como aparece na aba "Actions" do GitHub.
+name: CI - Isaac Gomes
+
+# on: o GATILHO, ou seja, o evento que dispara o workflow.
+on:
+  # push: roda a cada "git push" que chega ao GitHub, em qualquer branch.
+  push:
+
+# permissions: o que o token automático do workflow (GITHUB_TOKEN) pode fazer.
+# contents: read = só ler o código. O pipeline não precisa de mais que isso.
+permissions:
+  contents: read
+
+# jobs: os trabalhos do pipeline. Cada job roda num runner (máquina virtual)
+# NOVO e SEPARADO, que é apagado no final: um job não enxerga os arquivos do
+# outro. Por isso TODO job repete checkout + setup-python + dependências.
+jobs:
+  # ---------------------------------------------------------------------------
+  # JOB 1 - LINT: análise estática com o Ruff (acha erros sem executar o código)
+  # ---------------------------------------------------------------------------
+  lint:
+    # runs-on: sistema operacional da máquina que o GitHub cria para este job.
+    runs-on: ubuntu-latest
+    # steps: os passos do job, em ordem. Se um passo falha, o job para ali.
+    steps:
+      # uses: usa uma ACTION pronta, publicada no GitHub (@v7 = versão major).
+      # checkout: baixa o código do repositório, no commit do push, para o runner.
+      # Sem ele a máquina começa vazia e nenhum comando acha os arquivos.
+      - name: Baixar código
+        uses: actions/checkout@v7
+
+      # setup-python: instala o Python na versão pedida no "with".
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        # with: parâmetros passados para a action.
+        with:
+          # 3.12 = mesma versão da imagem do Dockerfile (python:3.12-slim).
+          python-version: "3.12"
+
+      # run: executa um COMANDO no terminal do runner (o que eu digitaria).
+      # requirements-dev.txt = dependências do app + pytest + ruff.
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
+
+      # CONTROLE DO JOB. "tasks.py lint" executa "python -m ruff check .",
+      # com as regras do pyproject.toml. Achou problema: sai com erro = vermelho.
+      - name: Lint com Ruff
+        run: python tasks.py lint
+
+  # ---------------------------------------------------------------------------
+  # JOB 2 - TEST: executa os testes automatizados com o pytest
+  # ---------------------------------------------------------------------------
+  test:
+    # needs: dependência. Só começa se o job "lint" terminar com SUCESSO.
+    # Se o lint falhar, este job nem roda: fica "skipped" (pulado).
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      # Máquina nova e vazia: repete checkout, Python e dependências.
+      - name: Baixar código
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
+
+      # CONTROLE DO JOB. "tasks.py test" executa "python -m pytest".
+      # Um teste falhou: sai com erro = vermelho.
+      - name: Testes com pytest
+        # env: variável de ambiente só deste passo. PYTEST_ADDOPTS=-v liga o
+        # modo "verbose": o log lista cada teste pelo nome, com PASSED/FAILED.
+        env:
+          PYTEST_ADDOPTS: "-v"
+        run: python tasks.py test
+
+  # ---------------------------------------------------------------------------
+  # JOB 3 - BUILD: compila todo o código Python para bytecode (.pyc)
+  # ---------------------------------------------------------------------------
+  build:
+    # needs: só roda se o "test" passar (e o test só roda se o lint passar).
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v7
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      # Só as dependências de produção (requirements.txt), igual à etapa
+      # "builder" do Dockerfile. Pytest e Ruff não fazem parte do produto.
+      - name: Instalar dependências
+        run: python -m pip install -r requirements.txt
+
+      # CONTROLE DO JOB. "tasks.py build" executa
+      # "python -m compileall -q app scripts tasks.py": compila cada arquivo .py.
+      # Erro de sintaxe em qualquer arquivo: sai com erro = vermelho.
+      # O -q (quiet) só imprime se der erro: log sem mensagens + verde = build OK.
+      - name: Build com compileall
+        run: python tasks.py build
