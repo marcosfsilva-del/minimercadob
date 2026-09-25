@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .checkout-success .success-head {
+    align-items: center;
+    display: flex;
+    gap: 14px;
+  }
+
+  .checkout-success .success-mark {
+    align-items: center;
+    background: #eef2ea;
+    border: 1px solid #cdd7c6;
+    border-radius: 999px;
+    color: #244b35;
+    display: inline-flex;
+    flex: none;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
+  }
+
+  .checkout-success .success-head h3,
+  .checkout-success .success-head p {
+    margin-bottom: 0;
+  }
+
+  .checkout-success .code-box {
+    background: #eef2ea;
+    border: 1px solid #d8ded3;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .checkout-success .code-box .eyebrow {
+    margin-bottom: 6px;
+  }
+
+  .checkout-success .code {
+    color: #244b35;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 0;
+  }
+
+  .checkout-success .divider {
+    border: 0;
+    border-top: 1px solid #e4e9df;
+    margin: 0;
+    width: 100%;
+  }
+
+  .checkout-success .order-lines {
+    display: grid;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .checkout-success .order-lines li {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .checkout-success .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .checkout-success .actions .ghost {
+    background: #ffffff;
+    border-color: #cdd7c6;
+    color: #25322b;
+  }
+
+  @media (max-width: 480px) {
+    .checkout-success .actions a {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+
+<section class="page-title">
+  <div>
+    <h2>Compra finalizada</h2>
+    {% if order %}
+      <p>Guarde o código do pedido para acompanhar sua compra.</p>
+    {% else %}
+      <p>Não encontramos um pedido com esse código.</p>
+    {% endif %}
+  </div>
+</section>
+
+<article class="panel narrow stack checkout-success">
+  {% if not order %}
+    <h3>Pedido não encontrado</h3>
+    <p class="muted">
+      Nenhum pedido corresponde ao código <strong>{{ public_code }}</strong>.
+      Confira o código informado ou consulte o histórico de pedidos.
+    </p>
+    <div class="actions">
+      <a class="button-link" href="{{ url_for('web.catalog') }}">Voltar ao catálogo</a>
+      <a class="button-link ghost" href="{{ url_for('web.orders') }}">Ver meus pedidos</a>
+    </div>
+  {% else %}
+    <div class="success-head">
+      <span class="success-mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+      </span>
+      <div>
+        <h3>Obrigado pela compra!</h3>
+        <p class="muted">Seu pedido foi registrado com sucesso.</p>
+      </div>
+    </div>
+
+    <div class="code-box">
+      <p class="eyebrow">Código do pedido</p>
+      <p class="code">{{ order.public_code }}</p>
+    </div>
+
+    <hr class="divider">
+
+    {% if order.customer_name %}
+      <div class="summary-line">
+        <span>Cliente</span>
+        <strong>{{ order.customer_name }}</strong>
+      </div>
+    {% endif %}
+
+    <div class="summary-line">
+      <span>Itens</span>
+      <strong>{{ order.item_count }}</strong>
+    </div>
+
+    <ul class="order-lines">
+      {% for line in order.lines %}
+        <li>
+          <span>{{ line.quantity }}x {{ line.name }}</span>
+          <span class="muted">{{ line.subtotal|brl }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <hr class="divider">
+
+    <div class="summary-line">
+      <span>Total da compra</span>
+      <strong class="price">{{ order.total|brl }}</strong>
+    </div>
+
+    <div class="actions">
+      <a class="button-link" href="{{ url_for('web.catalog') }}">Voltar ao catálogo</a>
+      <a class="button-link ghost" href="{{ url_for('web.orders') }}">Ver meus pedidos</a>
+    </div>
+  {% endif %}
+</article>
+{% endblock %}
