@@ -2,6 +2,7 @@
 
 Requisito 070, issue #57: o filtro por nome do cliente.
 Requisito 071, issue #58: a ordenação por data e por total.
+Requisito 072, issue #59: filtro e ordenação juntos, no banco, na página e na API.
 Cada critério de aceitação tem pelo menos um teste com o nome do critério.
 """
 
@@ -115,6 +116,16 @@ def test_empate_no_total_e_desempatado_pelo_numero_do_pedido():
     assert numeros(ordenar_pedidos(empatados, "total_asc")) == [5, 6, 7]
 
 
+# ------------------------------------------------------------------ criterios da issue #59
+
+
+def test_ordenacao_funciona_com_filtro_aplicado(pedidos):
+    filtrados = filtrar_por_cliente(pedidos, "ana")
+
+    assert numeros(ordenar_pedidos(filtrados, "total_desc")) == [3, 1]
+    assert numeros(ordenar_pedidos(filtrados, "data_asc")) == [1, 3]
+
+
 # ------------------------------------------------------------------ banco de dados
 
 
@@ -130,6 +141,19 @@ def test_buscar_historico_filtra_pedidos_do_banco(pedidos):
 
     # list_orders, do core, devolve do mais recente para o mais antigo
     assert numeros(resultado) == [3, 1]
+
+
+def test_buscar_historico_filtra_e_ordena_pedidos_do_banco(pedidos):
+    engine = create_engine("sqlite://")
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        session.add_all(pedidos)
+        session.commit()
+
+        resultado = buscar_historico(session, termo="ANA", ordem="total_asc")
+
+    assert numeros(resultado) == [1, 3]
 
 
 # ------------------------------------------------------------------ pagina e API
@@ -160,6 +184,17 @@ def test_pagina_repassa_o_filtro_e_mostra_so_os_pedidos_do_cliente(cliente_http)
     assert "Pedido #2" not in corpo
 
 
+def test_pagina_aplica_filtro_e_ordenacao_juntos(cliente_http):
+    client, chamadas = cliente_http
+
+    resposta = client.get("/historico-pedidos?cliente=ana&ordem=total_desc")
+
+    assert chamadas == [("ana", "total_desc")]
+    corpo = resposta.data.decode()
+    assert corpo.index("Pedido #3") < corpo.index("Pedido #1")
+    assert 'value="total_desc" selected' in corpo
+
+
 def test_pagina_sem_resultado_mostra_aviso(cliente_http):
     client, _ = cliente_http
 
@@ -176,3 +211,11 @@ def test_api_devolve_pedidos_filtrados(cliente_http):
     assert resposta.status_code == 200
     # sem ordem informada, vale a padrao: mais recente primeiro
     assert [item["id"] for item in resposta.get_json()] == [3, 1]
+
+
+def test_api_aplica_filtro_e_ordenacao_juntos(cliente_http):
+    client, _ = cliente_http
+
+    resposta = client.get("/historico-pedidos/api?cliente=ana&ordem=data_asc")
+
+    assert [item["id"] for item in resposta.get_json()] == [1, 3]
