@@ -23,6 +23,7 @@ jobs:
         run: python -m ruff check .
 
   teste_unitario:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
@@ -39,6 +40,7 @@ jobs:
         run: python -m pytest -v
 
   build:
+    needs: teste_unitario
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
