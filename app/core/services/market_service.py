@@ -78,6 +78,7 @@ def product_to_dict(product: Product) -> dict[str, object]:
 def order_to_dict(order: Order) -> dict[str, object]:
     return {
         "id": order.id,
+        "publicCode": order.public_code,
         "customerName": order.customer_name,
         "total": order.total,
         "createdAt": order.created_at.isoformat(),

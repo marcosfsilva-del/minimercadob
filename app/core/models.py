@@ -1,9 +1,18 @@
+import secrets
+import string
 from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+
+def generate_public_code():
+    safe_alphabet = ''.join(c for c in string.ascii_uppercase + string.digits if c not in 'O0I1')
+    part1 = ''.join(secrets.choice(safe_alphabet) for _ in range(3))
+    part2 = ''.join(secrets.choice(safe_alphabet) for _ in range(4))
+    return f"{part1}-{part2}"
 
 
 class Product(Base):
@@ -48,6 +57,9 @@ class Order(Base):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    public_code: Mapped[str] = mapped_column(
+        String(10), unique=True, nullable=False, default=generate_public_code
+    )
     customer_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
     total: Mapped[float] = mapped_column(Float, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
