@@ -4,8 +4,11 @@ from sqlalchemy.orm import Session
 from app.core.models import InventoryMovement, Order, OrderItem, Product
 
 
-def list_products(session: Session) -> list[Product]:
-    return list(session.scalars(select(Product).order_by(Product.name)))
+def list_products(session: Session, order: str = "asc") -> list[Product]:
+    query = select(Product).order_by(
+        Product.name.desc() if order == "desc" else Product.name.asc()
+    )
+    return list(session.scalars(query))
 
 
 def list_orders(session: Session) -> list[Order]:

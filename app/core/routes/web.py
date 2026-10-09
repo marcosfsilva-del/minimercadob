@@ -23,9 +23,14 @@ def _cart_items(products):
 
 @web_bp.get("/")
 def catalog():
+    order = request.args.get("order", "asc")
+    if order not in ("asc", "desc"):
+        order = "asc"
+
     with session_scope() as db:
-        products = list_products(db)
-    return render_template("catalog.html", products=products)
+        products = list_products(db, order=order)
+
+    return render_template("catalog.html", products=products, order=order)
 
 
 @web_bp.post("/cart/add/<int:product_id>")

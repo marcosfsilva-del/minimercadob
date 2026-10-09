@@ -5,6 +5,13 @@
   <div>
     <h2>Catálogo</h2>
     <p>Produtos iniciais para as features da turma evoluírem.</p>
+<form method="get" action="{{ url_for('web.catalog') }}">
+  <label for="order">Ordenar por nome:</label>
+  <select id="order" name="order" onchange="this.form.submit()">
+    <option value="asc" {% if order == "asc" %}selected{% endif %}>A–Z</option>
+    <option value="desc" {% if order == "desc" %}selected{% endif %}>Z–A</option>
+  </select>
+</form>
   </div>
   <div class="toolbar">
     {% for slot in slot_renderers("PRODUCT_LIST_TOOLBAR") %}
