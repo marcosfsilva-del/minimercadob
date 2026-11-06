@@ -59,3 +59,12 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
+
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Criar Imagem
+        run: docker build -t minimercado-nomealuno:1.0 .    
