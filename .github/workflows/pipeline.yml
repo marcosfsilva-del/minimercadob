@@ -63,3 +63,12 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+      - name: Criar Imagem
+        run: docker build -t minimercado-renata:1.0 .
+     
