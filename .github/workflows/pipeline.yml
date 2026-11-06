@@ -85,5 +85,5 @@ jobs:
         with:
           scan-type: image
           image-ref: minimercado-lucasfmorais:1.0
-          severity: HIGH, CRITICAL
+          severity: "HIGH,CRITICAL"
           exit-code: '1'
