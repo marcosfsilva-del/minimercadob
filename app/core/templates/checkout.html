@@ -14,6 +14,26 @@
       Nome do cliente
       <input type="text" name="customer_name" placeholder="Opcional">
     </label>
+    <fieldset>
+      <legend>Forma de entrega</legend>
+      <label>
+        <input type="radio" name="delivery_method" value="retirada" checked>
+        Retirada
+      </label>
+      <label>
+        <input type="radio" name="delivery_method" value="entrega">
+        Entrega
+      </label>
+    </fieldset>
+    <label>
+      Endereço para entrega
+      <input
+        type="text"
+        name="delivery_address"
+        placeholder="Informe o endereço de entrega"
+        disabled
+      >
+    </label>
     <div class="summary-line">
       <span>Itens</span>
       <strong>{{ items|length }}</strong>
@@ -28,4 +48,22 @@
     <button type="submit" {% if not items %}disabled{% endif %}>Gerar pedido</button>
   </form>
 </article>
+
+<script>
+  const deliveryMethodInputs = document.querySelectorAll('input[name="delivery_method"]');
+  const deliveryAddressInput = document.querySelector('input[name="delivery_address"]');
+
+  function updateDeliveryAddress() {
+    const method = document.querySelector('input[name="delivery_method"]:checked').value;
+    const isDelivery = method === "entrega";
+    deliveryAddressInput.disabled = !isDelivery;
+    deliveryAddressInput.required = isDelivery;
+  }
+
+  deliveryMethodInputs.forEach((input) => {
+    input.addEventListener("change", updateDeliveryAddress);
+  });
+
+  updateDeliveryAddress();
+</script>
 {% endblock %}

@@ -78,13 +78,30 @@ def checkout():
 
 @web_bp.post("/checkout")
 def finish_checkout():
-    with session_scope() as db:
-        products = list_products(db)
-        items = _cart_items(products)
-        payload = [
-            {"product_id": item["product"].id, "quantity": item["quantity"]} for item in items
-        ]
-        create_order(db, payload, request.form.get("customer_name"))
+    delivery_method = request.form.get("delivery_method", "retirada")
+    delivery_address = request.form.get("delivery_address")
+    items = []
+    total = 0.0
+
+    try:
+        with session_scope() as db:
+            products = list_products(db)
+            items = _cart_items(products)
+            total = sum(item["product"].price * item["quantity"] for item in items)
+            payload = [
+                {"product_id": item["product"].id, "quantity": item["quantity"]}
+                for item in items
+            ]
+            create_order(
+                db,
+                payload,
+                request.form.get("customer_name"),
+                delivery_method,
+                delivery_address,
+            )
+    except ValueError as exc:
+        flash(str(exc))
+        return render_template("checkout.html", items=items, total=total), 400
 
     session["cart"] = {}
     flash("Pedido criado com sucesso.")
