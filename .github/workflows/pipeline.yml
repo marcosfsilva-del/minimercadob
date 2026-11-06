@@ -57,5 +57,13 @@ jobs:
       - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
 
-      - name: Build com compileall
-        run: python -m compileall -q app scripts tasks.py
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Criar Imagem
+        run: docker build -t minimercado-eduardo:1.0 .
