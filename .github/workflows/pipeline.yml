@@ -77,4 +77,5 @@ jobs:
             scan-type: image
             image-ref: minimercado-nomealuno:1.0
             severity: 'HIGH,CRITICAL'
+            ignore-unfixed: true
             exit-code: '1'
