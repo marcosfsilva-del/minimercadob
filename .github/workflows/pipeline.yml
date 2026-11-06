@@ -59,3 +59,12 @@ jobs:
 
       - name: Build
         run: python3 tasks.py build
+        
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Criar Imagem
+        run: docker build -t minimercado-nomealuno:1.0 .   
