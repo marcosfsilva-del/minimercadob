@@ -92,4 +92,22 @@ jobs:
       # ===========================================
   # ==================================================
 
+  docker-build: 
+    runs-on: ubuntu-latest 
+    needs: build 
+
+    steps: 
+      
+      # ===========================================
+      # === Configuração do Runner e Ambiente ===
+      - name: Baixar código no runner 
+        uses: actions/checkout@v6 
+
+      # ===========================================
+      # === Criar a imagem Docker === 
+      - name: Criar imagem Docker 
+        run: docker build -t minimercado-gabrielcirino:1.0 .
+
+    
+
   
