@@ -54,4 +54,14 @@ jobs:
           python-version: "3.13"
 
       - name: Executar compileall
-        run: python -m compileall -q app scripts tasks.py
+        run: python -m compileall -q app scripts tasks.py 
+
+  docker-build:
+    name: Job 3 - Build (compileall)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Criar imagem
+        run: docker build -t minimercadob-marina:1.0 .
