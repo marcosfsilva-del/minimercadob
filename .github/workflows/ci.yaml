@@ -108,6 +108,14 @@ jobs:
       - name: Criar imagem Docker 
         run: docker build -t minimercado-gabrielcirino:1.0 .
 
-    
+      # ===========================================
+      # === Checar vulnerabilidades na imagem Docker === 
+      - name: Checar vulnerabilidades na imagem Docker 
+        uses: aquasecurity/trivy-action@v0.9.0
+        with: 
+          scan-type: 'image'
+          image-ref: 'minimercado-gabrielcirino:1.0'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'     
 
   
