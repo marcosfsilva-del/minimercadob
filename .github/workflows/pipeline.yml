@@ -59,3 +59,19 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
+
+
+ docker-build:
+    name: BUILD
+    needs: BUILD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      
+      - name: CRIAR IMAGEM
+        run: docker build -t minimercadob-mariaclarapma:1.0 .
+
+
+        
