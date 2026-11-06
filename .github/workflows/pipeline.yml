@@ -75,6 +75,6 @@ jobs:
         with:
             scant-type: image
             image-ref: minimercadob-lucasbarbosa:1.0
-            severity: "HIGH, CRITICAL"
+            severity: 'HIGH,CRITICAL'
             exit-code: '1'
             
