@@ -56,3 +56,12 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py        
+
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+      - name: Criar imagem
+        run: docker build -t minimercadob-henriquechaves:1.0 .
