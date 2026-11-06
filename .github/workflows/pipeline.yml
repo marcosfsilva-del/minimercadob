@@ -1,4 +1,4 @@
-﻿name: CI
+name: CI
 
 on:
   push:
@@ -60,18 +60,13 @@ jobs:
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
 
-
- docker-build:
-    name: BUILD
-    needs: BUILD
+  docker-build:
+    name: DOCKER BUILD
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v6
 
-      
-      - name: CRIAR IMAGEM
+      - name: Criar imagem
         run: docker build -t minimercadob-mariaclarapma:1.0 .
-
-
-        
