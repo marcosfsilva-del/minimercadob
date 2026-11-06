@@ -2,8 +2,7 @@ name: Pipeline
 
 on:
   push:
-  pull_request:
-
+  
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -60,10 +59,11 @@ jobs:
         run: python -m compileall -q app scripts tasks.py
 
   docker-build:
-	  needs: build
-	  runs-on: ubuntu-latest
-	  steps:
-		  - name: Baixar codigo
-		  uses: actions/checkout@v4
-		  - name: Criar imagem
-		  run: docker build -t minimercado-jproliveira:1.0 .
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Criar imagem
+        run: docker build -t minimercado-jproliveira:1.0 .
