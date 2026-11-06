@@ -66,3 +66,17 @@ jobs:
 
       - name: Executar build
         run: python -m compileall app scripts tasks.py
+
+        
+  docker-build: 
+    name: Docker-Build
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Criar Imagem
+        run: docker build -t minimercado-lucasfmorais:1.0 .
+        
