@@ -49,6 +49,21 @@ def create_order_api():
         {"product_id": int(item["productId"]), "quantity": int(item["quantity"])}
         for item in data.get("items", [])
     ]
-    with session_scope() as db:
-        order = create_order(db, items, data.get("customerName"))
-        return jsonify(order_to_dict(order)), 201
+
+    try: #adciona um try pra capturar o erro
+        with session_scope() as db:
+            order = create_order(db, items, data.get("customerName"))
+            return jsonify(order_to_dict(order)), 201
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
+# @api_bp.post("/orders") versão antiga
+# def create_order_api():
+#     data = request.get_json(silent=True) or {}
+#     items = [
+#         {"product_id": int(item["productId"]), "quantity": int(item["quantity"])}
+#         for item in data.get("items", [])
+#     ]
+#     with session_scope() as db:
+#         order = create_order(db, items, data.get("customerName"))
+#         return jsonify(order_to_dict(order)), 201
