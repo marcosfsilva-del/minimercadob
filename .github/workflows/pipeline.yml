@@ -68,8 +68,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Baixar codigo
         uses: actions/checkout@v6
 
-      - name: Build Docker image
+      - name: Criar imagem
         run: docker build -t minimercado-livmoorais:1.0 .
+
+      - name: Checar vulnerabilidades
+        uses: aquasecurity/trivy-action@0.36.0
+        with:
+          scan-type: image
+          image-ref: minimercado-livmoorais:1.0
+          severity: HIGH,CRITICAL
+          exit-code: '1'
