@@ -79,5 +79,5 @@ jobs:
         with:
           scan-type: image
           image-ref: minimercado-livmoorais:1.0
-          severity: HIGH,CRITICAL
-          exit-code: '1'
+          severity: "HIGH,CRITICAL"
+          exit-code: "1"
