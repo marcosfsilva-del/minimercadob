@@ -61,10 +61,20 @@ jobs:
         run: python3 tasks.py build
         
   docker-build:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Baixar codigo
-        uses: actions/checkout@v4
-      - name: Criar Imagem
-        run: docker build -t minimercado-nomealuno:1.0 .   
+      needs: build
+      runs-on: ubuntu-latest
+    
+      steps:
+        - name: Baixar codigo
+          uses: actions/checkout@v4
+    
+        - name: Criar Imagem
+          run: docker build -t minimercado-nomealuno:1.0 .
+    
+        - name: Checar Vulnerabilidades
+          uses: aquasecurity/trivy-action@v0.36.0
+          with:
+            scan-type: image
+            image-ref: minimercado-nomealuno:1.0
+            severity: 'HIGH,CRITICAL'
+            exit-code: '1'
