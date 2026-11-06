@@ -2,7 +2,8 @@ name: Pipeline
 
 on:
   push:
-  
+  pull_request:
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -67,3 +68,10 @@ jobs:
 
       - name: Criar imagem
         run: docker build -t minimercado-jproliveira:1.0 .
+      - name: Checar vulnerabilidades
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: image
+          image-ref: minimercado-jproliveira:1.0
+          severity: HIGH, CRITICAL
+          exit-code: '1'
