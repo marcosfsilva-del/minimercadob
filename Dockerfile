@@ -1,4 +1,4 @@
-FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /app
 COPY requirements-dev.txt requirements.txt ./
@@ -7,7 +7,7 @@ RUN python -m pip install --upgrade pip && python -m pip install --prefix=/insta
 COPY . .
 RUN python -m compileall -q app scripts tasks.py
 
-FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d
+FROM python:3.14-slim
 
 WORKDIR /app
 ENV PORT=3000
