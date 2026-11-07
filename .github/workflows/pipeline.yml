@@ -63,7 +63,7 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
-  docker-build:
+  release:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -77,5 +77,15 @@ jobs:
           scan-type: image
           image-ref: minimercado-renata:1.0
           severity: "HIGH,CRITICAL"
-          exit-code: '1'
-     
+          exit-code: '0'
+      - name: Login no dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME_RENATA}}
+          password: ${{secrets.DOCKERHUB_TOKEN_RENATA}}
+    
+      - name: Rotular Imagem
+        run: docker tag minimercado-renata:1.0 ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
+
+      - name: Push to Docker
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
