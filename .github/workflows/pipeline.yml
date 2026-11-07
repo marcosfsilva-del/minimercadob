@@ -81,8 +81,8 @@ jobs:
       - name: Login no dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME_RENATA}}
-          password: ${{secrets.DOCKERHUB_TOKEN_RENATA}}
+          username: ${{secrets.DOCKER_USERNAME_RENATA}}
+          password: ${{secrets.DOCKER_TOKEN_RENATA}}
     
       - name: Rotular Imagem
         run: docker tag minimercado-renata:1.0 ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
