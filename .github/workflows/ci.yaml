@@ -92,7 +92,7 @@ jobs:
       # ===========================================
   # ==================================================
 
-  docker-build: 
+  release: 
     runs-on: ubuntu-latest 
     needs: build 
 
@@ -117,5 +117,15 @@ jobs:
           image-ref: 'minimercado-gabrielcirino:1.0'
           severity: 'HIGH,CRITICAL'
           exit-code: '1'     
+
+      # ===========================================
+      # === Login no Docker Hub ===
+      - name: Login no Docker Hub 
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO}} }}
+          password: ${{ secrets.DOCKER_TOKEN_GABRIEL_CIRINO}}
+      
+
 
   
