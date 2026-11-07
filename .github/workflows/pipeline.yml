@@ -67,7 +67,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{secrets.DOCKER_USER_M}}
-          passwrod: ${{secrets.DOCKER_TOKEN_MARCOS}}    
+          password: ${{secrets.DOCKER_TOKEN_MARCOS}}    
 
       - name: Rotular Imagem 
         run: docker tag minimercado-nomealuno:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:1.0
