@@ -7,7 +7,7 @@ RUN python -m pip install --upgrade pip && python -m pip install --prefix=/insta
 COPY . .
 RUN python -m compileall -q app scripts tasks.py
 
-FROM python:3.12-slim
+FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d
 
 WORKDIR /app
 ENV PORT=3000
