@@ -121,10 +121,20 @@ jobs:
       # ===========================================
       # === Login no Docker Hub ===
       - name: Login no Docker Hub 
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO}} }}
+          username: ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}
           password: ${{ secrets.DOCKER_TOKEN_GABRIEL_CIRINO}}
+
+      # ===========================================
+      # === Rotular a imagem Docker ===
+      - name: Rotular Imagem Docker 
+        run: docker tag minimercado-gabrielcirino:1.0 ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:1.0
+
+      # ===========================================
+      # === Publicar a imagem Docker no Docker Hub ===
+      - name: Publicar a imagem no Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:1.0 
       
 
 
