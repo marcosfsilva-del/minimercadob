@@ -85,7 +85,7 @@ jobs:
           password: ${{secrets.DOCKER_TOKEN_RENATA}}
     
       - name: Rotular Imagem
-        run: docker tag minimercado-renata:1.0 ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
+        run: docker tag minimercado-renata:1.0 ${{secrets.DOCKER_USERNAME_RENATA}}/minimercado-renata:1.0
 
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USERNAME_RENATA}}/minimercado-renata:1.0
