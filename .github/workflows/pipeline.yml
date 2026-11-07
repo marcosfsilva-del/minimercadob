@@ -88,4 +88,4 @@ jobs:
         run: docker tag minimercado-renata:1.0 ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
 
       - name: Push to Docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_RENATA}}/minimercado-renata:1.0
+        run: docker push ${{secrets.DOCKER_USERNAME_RENATA}}/minimercado-renata:1.0
