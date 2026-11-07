@@ -17,7 +17,7 @@ jobs:
       #===========================================
       # === Configuração do Runner e Ambiente === 
       - name: Baixar código no runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -47,7 +47,7 @@ jobs:
       # ===========================================
       # === Configuração do Runner e Ambiente ===
       - name: Baixar código no runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -75,7 +75,7 @@ jobs:
       # ===========================================
       # === Configuração do Runner e Ambiente ===
       - name: Baixar código no runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -101,7 +101,7 @@ jobs:
       # ===========================================
       # === Configuração do Runner e Ambiente ===
       - name: Baixar código no runner 
-        uses: actions/checkout@v6 
+        uses: actions/checkout@v4 
 
       # ===========================================
       # === Criar a imagem Docker === 
