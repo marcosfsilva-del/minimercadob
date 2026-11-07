@@ -78,7 +78,7 @@ jobs:
       - name: login no dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERGUB_USERNAME_JPROLIVEIRA}}
+          username: ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA}}
           password: ${{secrets.DOCKERHUB_TOKEN_JPROLIVEIRA}}
 
       - name: Rotular Imagem
