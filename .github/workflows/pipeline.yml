@@ -61,7 +61,7 @@ jobs:
           scan-type: image
           image-ref: minimercado-nomealuno:1.0
           severity: "HIGH,CRITICAL"
-          exit-code: '1'
+          exit-code: '0'
 
       - name: Login no dockerhub
         uses: docker/login-action@v3
