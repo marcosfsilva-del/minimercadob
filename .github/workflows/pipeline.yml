@@ -76,17 +76,17 @@ jobs:
           severity: "HIGH,CRITICAL"
           exit-code: '0'
 
-      - name: Login no dockerhub
+      - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME_KAIKY_FERREIRA}}
-          password: ${{secrets.DOCKERHUB_TOKEN_KAIKY_FERREIRA}}    
+          username: ${{ secrets.DOCKERHUB_USERNAME_KAIKY_FERREIRA }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_KAIKY_FERREIRA }}
 
-      - name: Rotular Imagem 
-        run: docker tag minimercado-kaiky:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-kaiky:1.0
-          
+      - name: Rotular Imagem
+        run: docker tag minimercado-kaiky:1.0 ksferreira35/minimercado-kaiky:1.0
+
       - name: Push to Docker
-        run: docker push ${{secrets.DOCKER_USER_M}}/minimercado-kaiky:1.0
+        run: docker push ksferreira35/minimercado-kaiky:1.0
           
           
       
