@@ -83,7 +83,7 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN_KAIKY_FERREIRA}}    
 
       - name: Rotular Imagem 
-        run: docker tag minimercado-nomealuno:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-kaiky:1.0
+        run: docker tag minimercado-kaiky:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-kaiky:1.0
           
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USER_M}}/minimercado-kaiky:1.0
