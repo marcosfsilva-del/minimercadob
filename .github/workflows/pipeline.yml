@@ -63,5 +63,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Criar Imagem
         run: docker build -t minimercado-clarice:1.0 .
-      - name: Build com compileall
-        run: python -m compileall .
+      - name: Checar Vulnerabilidade
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: image
+          image-ref: minimercadob-clarice:1.0
+          severity: HIGH, CRITICAL
+          exit-code: '1'
