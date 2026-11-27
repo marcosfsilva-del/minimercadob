@@ -89,3 +89,10 @@ jobs:
 
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USERNAME_RENATA}}/minimercado-renata:1.0
+        
+    deploy:
+      needs: release
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy no Render
+          run: curl --request POST "{{secrets.DEPLOY_HOOK_RENATA}}"
