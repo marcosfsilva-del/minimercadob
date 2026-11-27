@@ -1,24 +1,19 @@
-name: Pipeline
-
+name: CI
 on:
   push:
-  pull_request:
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
-        uses: actions/checkout@v6
-
+      - name: Baixar codigo
+        uses: actions/checkout@v4
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Instalar dependências
+      - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
-
       - name: Lint com Ruff
         run: python -m ruff check .
 
@@ -26,18 +21,14 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
-        uses: actions/checkout@v6
-
+      - name: Baixar codigo
+        uses: actions/checkout@v4
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-    
-
-      - name: Instalar dependências
+      - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
-
       - name: Testes com Pytest
         run: python -m pytest -v
 
@@ -45,17 +36,14 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
-        uses: actions/checkout@v6
-
+      - name: Baixar codigo
+        uses: actions/checkout@v4
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Instalar dependências
-        run: python -m pip install -r requirements.txt
-
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
 
@@ -65,29 +53,36 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v4
-
-      - name: Criar imagem
-        run: docker build -t minimercado-jproliveira1:1.0 .
-      - name: Checar vulnerabilidades
+      - name: Criar Imagem
+        run: docker build -t minimercado-nomealuno:1.0 .      
+      - name: Checar Vulnerabilidades
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
-          image-ref: minimercado-jproliveira1:1.0
-          severity: 'HIGH,CRITICAL'
+          image-ref: minimercado-nomealuno:1.0
+          severity: "HIGH,CRITICAL"
           exit-code: '0'
-      - name: login no dockerhub
+
+      - name: Login no dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA}}
-          password: ${{secrets.DOCKERHUB_TOKEN_JPROLIVEIRA}}
+          username: ${{secrets.DOCKER_USER_M}}
+          password: ${{secrets.DOCKER_TOKEN_MARCOS}}    
 
-      - name: Rotular Imagem
-        run: docker tag minimercado-jproliveira1:1.0 ${{ secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:${GITHUB_SHA::7}
+      - name: Rotular Imagem 
+        run: docker tag minimercado-nomealuno:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:${GITHUB_SHA::7} 
+          
+      - name: Push to Docker
+        run: docker push ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:${GITHUB_SHA::7} 
 
-      - name: Push Docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:${GITHUB_SHA::7} 
+      #Envio de imagem latest
 
-
+      - name: Rotular Imagem Latest
+        run: docker tag minimercado-nomealuno:1.0 ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:latest
+          
+      - name: Push to Docker Latest
+        run: docker push ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:latest 
+    
   deploy:
     needs: release
     runs-on: ubuntu-latest
