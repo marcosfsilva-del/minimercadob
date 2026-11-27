@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.12-alpine AS builder
 
 WORKDIR /app
 COPY requirements-dev.txt requirements.txt ./
@@ -7,7 +7,9 @@ RUN python -m pip install --upgrade pip && python -m pip install --prefix=/insta
 COPY . .
 RUN python -m compileall -q app scripts tasks.py
 
-FROM python:3.12-slim
+# Base Alpine com pacotes atualizados: a base slim (Debian) trazia 54 CVEs HIGH,
+# quase todas sem correcao, e o Trivy (security gate) reprovava a imagem.
+FROM python:3.12-alpine
 
 WORKDIR /app
 ENV PORT=3000
@@ -16,7 +18,7 @@ ENV DATABASE_URL=sqlite:///data/devops_market.db
 COPY --from=builder /install /usr/local
 COPY . .
 
-RUN mkdir -p data
+RUN apk upgrade --no-cache && mkdir -p data
 
 EXPOSE 3000
 CMD ["sh", "-c", "python tasks.py db-seed && python -m app.core.server"]
