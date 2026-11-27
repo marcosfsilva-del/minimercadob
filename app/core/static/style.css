@@ -146,6 +146,11 @@ button:disabled {
   padding: 6px 8px;
 }
 
+.badge-out-of-stock {
+  background: #e0c4c4;
+  color: #7a1f1f;
+}
+
 .price,
 .total {
   color: #244b35;

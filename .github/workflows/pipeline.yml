@@ -1,0 +1,96 @@
+name: Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Lint com Ruff
+        run: python -m ruff check .
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Testes com Pytest
+        run: python -m pytest -v
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
+
+      - name: Build com compileall
+        run: python -m compileall -q app scripts tasks.py
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Criar Imagem
+        run: docker build -t minimercado-alarcao:1.0 .
+
+      - name: Checar Vulnerabilidades
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: image
+          image-ref: minimercado-alarcao:1.0
+          severity: "HIGH,CRITICAL"
+          exit-code: '0'
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_ALARCAO }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_ALARCAO }}
+
+      - name: Rotular Imagem
+        run: docker tag minimercado-alarcao:1.0 ${{ secrets.DOCKERHUB_USERNAME_ALARCAO }}/minimercado-alarcao:${GITHUB_SHA::7}
+
+      - name: Push to Docker
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME_ALARCAO }}/minimercado-alarcao:${GITHUB_SHA::7}
+
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar deploy no Render
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_ALARCAO }}"
