@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.12-alpine AS builder
 
 WORKDIR /app
 COPY requirements-dev.txt requirements.txt ./
@@ -7,7 +7,7 @@ RUN python -m pip install --upgrade pip && python -m pip install --prefix=/insta
 COPY . .
 RUN python -m compileall -q app scripts tasks.py
 
-FROM python:3.12-slim
+FROM python:3.12-alpine
 
 WORKDIR /app
 ENV PORT=3000
