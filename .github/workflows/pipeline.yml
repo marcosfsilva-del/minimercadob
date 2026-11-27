@@ -79,10 +79,10 @@ jobs:
           password: ${{secrets.DOCKER_TOKEN_MARINA}}
           
       - name: Rotular imagem e Push
-        run: docker tag minimercadob-marina:1.0 ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:1.0
+        run: docker tag minimercadob-marina:1.0 ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:${GITHUB_SHA::7}
         
       - name: Push to Docker
-        run: docker push ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:1.0
+        run: docker push ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:${GITHUB_SHA::7}
 
   deploy:
     needs: realese
