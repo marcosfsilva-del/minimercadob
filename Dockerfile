@@ -12,6 +12,9 @@ RUN python -m compileall -q app scripts tasks.py
 FROM python:3.12-alpine
 
 WORKDIR /app
+# Commit que gerou a imagem, exposto em /api/health para provar qual versao esta no ar.
+ARG COMMIT_SHA=local
+ENV COMMIT_SHA=$COMMIT_SHA
 ENV PORT=3000
 ENV DATABASE_URL=sqlite:///data/devops_market.db
 

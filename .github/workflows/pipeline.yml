@@ -3,10 +3,12 @@ name: CI
 on:
   push:
 
-# Quatro jobs em sequencia. Cada um so roda se o anterior passou:
-# lint -> test -> build -> release. Se o lint falhar, nada depois dele comeca.
+# Jobs em sequencia. Cada um so roda se o anterior passou:
+# lint -> test -> build -> release -> deploy -> dast
 # O release constroi a imagem Docker, analisa com o Trivy (security gate) e,
 # so se aprovada, publica no Docker Hub a MESMA imagem que foi analisada.
+# O deploy pede ao Render para rodar essa imagem e so termina verde quando
+# a URL publica responde com o commit desta execucao.
 
 jobs:
   lint:
@@ -65,6 +67,8 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.referencia.outputs.image }}
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v6
@@ -72,12 +76,16 @@ jobs:
       # Uma unica referencia para build, Trivy e push: usuario/devops-market:versao-commit.
       # A tag liga a imagem publicada ao commit que a gerou.
       - name: Definir referencia da imagem
+        id: referencia
         run: |
           NAMESPACE="${{ vars.DOCKERHUB_USERNAME }}"
-          echo "IMAGE=${NAMESPACE:-local}/devops-market:1.0.0-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+          IMAGE="${NAMESPACE:-local}/devops-market:1.0.0-${GITHUB_SHA::7}"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
 
+      # O commit vai para dentro da imagem e aparece em /api/health.
       - name: Build da imagem Docker
-        run: docker build -f Dockerfile -t "$IMAGE" .
+        run: docker build -f Dockerfile --build-arg COMMIT_SHA="${GITHUB_SHA::7}" -t "$IMAGE" .
 
       # Security gate: qualquer CVE HIGH ou CRITICAL reprova o job (exit-code 1)
       # e os passos de publicacao abaixo nao executam.
@@ -105,3 +113,64 @@ jobs:
           docker push "$IMAGE"
           echo "Imagem publicada: $IMAGE"
           echo "Digest: $(docker inspect --format '{{index .RepoDigests 0}}' "$IMAGE")"
+
+  # Deploy no Render (PaaS). Roda so em push e onde a Variable RENDER_APP_URL existe.
+  deploy:
+    needs: release
+    if: github.event_name == 'push' && vars.RENDER_APP_URL != ''
+    runs-on: ubuntu-latest
+    steps:
+      # O Deploy Hook e um segredo. O parametro imgURL diz ao Render qual imagem
+      # rodar: a mesma tag que o Trivy aprovou e o release publicou.
+      - name: Acionar Deploy Hook do Render
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          IMAGE: ${{ needs.release.outputs.image }}
+        run: |
+          IMG_URL=$(python3 -c 'import os, urllib.parse; print(urllib.parse.quote("docker.io/" + os.environ["IMAGE"], safe=""))')
+          curl --fail --silent --show-error --request POST "${HOOK}&imgURL=${IMG_URL}"
+          echo ""
+          echo "Deploy solicitado no Render para docker.io/$IMAGE"
+
+      # A resposta do hook so confirma que o pedido foi aceito. O health check
+      # espera a URL publica responder com o commit DESTA execucao: assim prova
+      # que a versao nova entrou no ar, e nao a anterior.
+      - name: Health check do Minimercado
+        env:
+          APP_URL: ${{ vars.RENDER_APP_URL }}
+        run: |
+          ESPERADO="${GITHUB_SHA::7}"
+          for tentativa in $(seq 1 36); do
+            RESPOSTA=$(curl --silent --max-time 30 "$APP_URL/api/health" || true)
+            if echo "$RESPOSTA" | grep -q '"status":"ok"' && echo "$RESPOSTA" | grep -q "\"commit\":\"$ESPERADO\""; then
+              echo "Aplicacao no ar com o commit $ESPERADO: $RESPOSTA"
+              exit 0
+            fi
+            echo "Tentativa $tentativa: ainda nao (resposta: ${RESPOSTA:-sem resposta})"
+            sleep 10
+          done
+          echo "Falha no health check: o commit $ESPERADO nao entrou no ar"
+          exit 1
+
+      - name: Smoke test das paginas
+        env:
+          APP_URL: ${{ vars.RENDER_APP_URL }}
+        run: |
+          for caminho in / /historico-pedidos "/historico-pedidos?cliente=ana&ordem=total_desc" /api/products; do
+            CODIGO=$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 30 "$APP_URL$caminho")
+            echo "$caminho -> HTTP $CODIGO"
+            test "$CODIGO" = "200"
+          done
+
+  # DAST passivo (exercicio extra): ZAP Baseline observa a aplicacao no ar sem
+  # atacar. Nao reprova a pipeline; gera o relatorio como evidencia.
+  dast:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Baseline
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          target: ${{ vars.RENDER_APP_URL }}
+          fail_action: false
+          allow_issue_writing: false
