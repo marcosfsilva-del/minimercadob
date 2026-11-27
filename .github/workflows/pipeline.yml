@@ -92,5 +92,5 @@ jobs:
     steps:
       - name: Disparar deploy no Render
         env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK_URL_ALARCAO }}
+          RENDER_DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK_ALARCAO }}
         run: curl -f -X POST "$RENDER_DEPLOY_HOOK"
