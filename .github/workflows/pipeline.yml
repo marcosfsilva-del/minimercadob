@@ -87,6 +87,13 @@ jobs:
 
       - name: Push to Docker
         run: docker push alarcao/minimercado-alarcao:1.0
+
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Disparar deploy no Render
+      run: curl -f -X POST "${{ secrets.DEPLOY_HOOK_URL_ALARCAO }}"
           
           
       
