@@ -83,4 +83,11 @@ jobs:
         
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:1.0
-        
+
+  deploy:
+    needs: realese
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy no Render
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_MARINA }}"
+      
