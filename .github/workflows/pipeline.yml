@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy no Render
-        run: curl --request POST " ${{ secrets.DEPLOY_HOOK_KAIKY }} "
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_KAIKY }}"
     
     
       
