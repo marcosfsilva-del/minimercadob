@@ -1,13 +1,15 @@
-name: CI
+name: Pipeline
+
 on:
   push:
+  pull_request:
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -25,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -43,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Baixar codigo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -51,7 +53,7 @@ jobs:
           python-version: "3.12"
 
       - name: Instalar dependencias
-        run: python -m pip install -r requirements-dev.txt
+        run: python -m pip install -r requirements.txt
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
@@ -81,16 +83,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN_ALARCAO }}
 
       - name: Rotular Imagem
-        run: docker tag minimercado-alarcao:1.0 alarcao/minimercado-alarcao:1.0
+        run: docker tag minimercado-alarcao:1.0 ${{ secrets.DOCKERHUB_USERNAME_ALARCAO }}/minimercado-alarcao:${GITHUB_SHA::7}
 
       - name: Push to Docker
-        run: docker push alarcao/minimercado-alarcao:1.0
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME_ALARCAO }}/minimercado-alarcao:${GITHUB_SHA::7}
 
   deploy:
     needs: release
     runs-on: ubuntu-latest
     steps:
       - name: Disparar deploy no Render
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK_ALARCAO }}
-        run: curl -f -X POST "$RENDER_DEPLOY_HOOK"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_ALARCAO }}"
