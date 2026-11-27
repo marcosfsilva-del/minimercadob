@@ -88,7 +88,14 @@ jobs:
       - name: Push to Docker
         run: docker push ksferreira35/minimercado-kaiky:1.0
           
-          
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy no Render
+        run: curl --request POST " ${{ secrets.DEPLOY_HOOK_KAIKY }} "
+    
+    
       
           
           
