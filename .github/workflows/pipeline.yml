@@ -87,3 +87,9 @@ jobs:
       - name: Push Docker
         run: docker push ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:1.0 
 
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy no Render
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_JPROLIVEIRA }}"
