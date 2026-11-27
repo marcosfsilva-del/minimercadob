@@ -3,8 +3,10 @@ name: CI
 on:
   push:
 
-# Tres jobs em sequencia. Cada um so roda se o anterior passou:
-# lint -> test -> build. Se o lint falhar, os testes nem comecam.
+# Quatro jobs em sequencia. Cada um so roda se o anterior passou:
+# lint -> test -> build -> release. Se o lint falhar, nada depois dele comeca.
+# O release constroi a imagem Docker, analisa com o Trivy (security gate) e,
+# so se aprovada, publica no Docker Hub a MESMA imagem que foi analisada.
 
 jobs:
   lint:
@@ -59,3 +61,47 @@ jobs:
 
       - name: Build com compileall
         run: python -m compileall -q app scripts tasks.py
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      # Uma unica referencia para build, Trivy e push: usuario/devops-market:versao-commit.
+      # A tag liga a imagem publicada ao commit que a gerou.
+      - name: Definir referencia da imagem
+        run: |
+          NAMESPACE="${{ vars.DOCKERHUB_USERNAME }}"
+          echo "IMAGE=${NAMESPACE:-local}/devops-market:1.0.0-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+      - name: Build da imagem Docker
+        run: docker build -f Dockerfile -t "$IMAGE" .
+
+      # Security gate: qualquer CVE HIGH ou CRITICAL reprova o job (exit-code 1)
+      # e os passos de publicacao abaixo nao executam.
+      - name: Analise de vulnerabilidades (Trivy)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ env.IMAGE }}
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          format: table
+
+      # Publicacao so em push e quando a Variable do Docker Hub existe neste repositorio.
+      # Usuario vem de Variable; token vem de Secret.
+      - name: Autenticar no Docker Hub
+        if: github.event_name == 'push' && vars.DOCKERHUB_USERNAME != ''
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publicar no Docker Hub
+        if: github.event_name == 'push' && vars.DOCKERHUB_USERNAME != ''
+        run: |
+          docker push "$IMAGE"
+          echo "Imagem publicada: $IMAGE"
+          echo "Digest: $(docker inspect --format '{{index .RepoDigests 0}}' "$IMAGE")"
