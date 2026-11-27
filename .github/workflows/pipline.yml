@@ -79,8 +79,8 @@ jobs:
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME_ANDRE_MARCHI }}
-          password: ${{ secrets.DOCKERHUB_TOKEN_ANDRE_MARCHI }}
+          username: ${{ secrets.DOCKERHUB_USERNAME_ANDRE }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_ANDRE }}
 
       - name: Rotular Imagem
         run: docker tag minimercado-andre:1.0 andremarchi50/minimercado-andre:1.0
