@@ -74,6 +74,16 @@ jobs:
           
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USER_M}}/minimercado-nomealuno:1.0
+
+  deploy: 
+    needs: release 
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Disparar deploy no Render
+        run: curl -fsS -X POST "${{secrets.DEPLOY_HOOK_GABRIEL_MARTINS_CIRINO}}"
+
+      
           
           
       
