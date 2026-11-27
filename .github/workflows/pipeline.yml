@@ -90,7 +90,7 @@ jobs:
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USERNAME_RENATA}}/minimercado-renata:1.0
         
-    deploy:
+  deploy:
       needs: release
       runs-on: ubuntu-latest
       steps:
