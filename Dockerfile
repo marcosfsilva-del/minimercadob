@@ -9,6 +9,11 @@ RUN python -m compileall -q app scripts tasks.py
 
 FROM python:3.14-slim
 
+ARG COMMIT_SHA=local
+ENV COMMIT_SHA=${COMMIT_SHA}
+LABEL 
+org.opencontainers.image.revision=${COMMIT_SHA}
+
 WORKDIR /app
 ENV PORT=3000
 ENV DATABASE_URL=sqlite:///data/devops_market.db

@@ -126,7 +126,8 @@ jobs:
         uses: zaproxy/action-baseline@v0.15.0
         with: 
           target: "${{ vars.RENDER_MINIMERCADO_URL }}"
-          fail_action: 'false'
+          allow_issue_writing: false 
+          fail_action: false
           
       
 
