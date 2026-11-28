@@ -84,6 +84,13 @@ jobs:
       - name: Disparar deploy no Render
         run: curl -fsS -X POST "${{ secrets.DEPLOY_HOOK_GABRIEL_MARTINS_CIRINO }}"
 
+
+  health-check: 
+    needs: deploy 
+    runs-on: ubuntu-latest
+
+    steps:
+
       - name: Health Check do minimercado
         run: |
           BASE_URL="${{ vars.RENDER_MINIMERCADO_URL }}"
