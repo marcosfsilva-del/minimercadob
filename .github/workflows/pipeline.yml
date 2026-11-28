@@ -87,6 +87,12 @@ jobs:
 
       - name: Push to Docker
         run: docker push ksferreira35/minimercado-kaiky:${GITHUB_SHA::7} 
+
+      - name: Rotular Imagem
+        run: docker tag minimercado-kaiky:1.0 ksferreira35/minimercado-kaiky:latest
+
+      - name: Push to Docker
+        run: docker push ksferreira35/minimercado-kaiky:latest 
           
   deploy:
     needs: release
