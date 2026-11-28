@@ -83,10 +83,17 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN_ANDRE }}
 
       - name: Rotular Imagem
-        run: docker tag minimercado-andre:1.0 andremarchi50/minimercado-andre:1.0
+        run: docker tag minimercado-andre:1.0 andremarchi50/minimercado-andre:${GITHUB_SHA::7}
 
       - name: Push to Docker
-        run: docker push andremarchi50/minimercado-andre:1.0
+        run: docker push andremarchi50/minimercado-andre:${GITHUB_SHA::7}
+
+      - name: Rotular Imagem
+        run: docker tag minimercado-andre:1.0 andremarchi50/minimercado-andre:latest
+
+      - name: Push to Docker
+        run: docker push andremarchi50/minimercado-andre:latest
+        
 
   deploy:
     needs: release
