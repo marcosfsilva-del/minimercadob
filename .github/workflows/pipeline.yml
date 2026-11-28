@@ -64,7 +64,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.9.0
         with:
           scan-type: 'image'
-          image-ref: 'cirinogustavom/minimercadob:1.0'
+          image-ref: '${{ env.IMAGE_NAME }}:1.0'
           severity: 'HIGH,CRITICAL'
           exit-code: '0'
 
