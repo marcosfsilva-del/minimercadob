@@ -72,10 +72,16 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN_GABRIEL_CIRINO }}
 
       - name: Rotular Imagem
-        run: docker tag minimercado-gabrielcirino:1.0 ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:1.0
+        run: docker tag minimercado-gabrielcirino:1.0 ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:${GITHUB_SHA::7}
 
       - name: Push to Docker
-        run: docker push ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:1.0
+        run: docker push ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:${GITHUB_SHA::7}
+
+      - name: Rotular imagem latest
+        run: docker tag minimercado-gabrielcirino:1.0 ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:latest
+
+      - name: Push to Docker latest
+        run: docker push ${{ secrets.DOCKER_USERNAME_GABRIEL_CIRINO }}/minimercado-gabrielcirino:latest
 
   deploy:
     needs: release
