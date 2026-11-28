@@ -82,10 +82,16 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN_HENRIQUE}}
 
       - name: Rotular Imagem
-        run: docker tag minimercadob-henriquechaves:1.0 ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:1.0
+        run: docker tag minimercadob-henriquechaves:1.0 ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:${GITHUB_SHA::7}
 
       - name: Push to Docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:1.0
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:${GITHUB_SHA::7}
+
+      - name: Rotular Imagem Latest
+        run: docker tag minimercadob-henriquechaves:1.0 ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:latest
+
+      - name: Push to Docker Latest
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_HENRIQUE}}/minimercadob-henriquechaves:latest
 
   deploy:
     needs: release
