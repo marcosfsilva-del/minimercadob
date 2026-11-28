@@ -1,10 +1,16 @@
-{% extends "base.html" %}
-
-{% block content %}
-<section class="page-title">
-  <div>
-    <h2>Exibir Desconto Por Categoria</h2>
-    <p>Feature em desenvolvimento.</p>
+<div class="stack cart-discount-summary">
+  {% if summary.has_discount %}
+    <div class="summary-line">
+      <span>Subtotal</span>
+      <span>{{ summary.subtotal|brl }}</span>
+    </div>
+    <div class="summary-line">
+      <span>Desconto {{ summary.category }} ({{ summary.percent }}%)</span>
+      <span>- {{ summary.discount|brl }}</span>
+    </div>
+  {% endif %}
+  <div class="summary-line">
+    <strong>Total final</strong>
+    <strong>{{ summary.final_total|brl }}</strong>
   </div>
-</section>
-{% endblock %}
+</div>
