@@ -116,3 +116,17 @@ jobs:
           echo "Health check falhou"
           exit 1
 
+  # Job DAST - Scan para encontrar vulnerabilidades enquanto a aplicação está em execução, simulando ataques reais de fora para dentro 
+  dast:   
+    needs: deploy 
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: ZAP Baseline SCAN
+        uses: zaproxy/action-baseline@v0.15.0
+        with: 
+          target: "${{ vars.RENDER_MINIMERCADO_URL }}"
+          fail_action: 'false'
+          
+      
+
