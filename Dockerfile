@@ -11,8 +11,7 @@ FROM python:3.14-slim
 
 ARG COMMIT_SHA=local
 ENV COMMIT_SHA=${COMMIT_SHA}
-LABEL 
-org.opencontainers.image.revision=${COMMIT_SHA}
+LABEL org.opencontainers.image.revision=${COMMIT_SHA}
 
 WORKDIR /app
 ENV PORT=3000
