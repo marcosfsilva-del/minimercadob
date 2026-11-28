@@ -90,11 +90,11 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     env:
-      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_CIRINOGUSTAVOM}}
     steps:
       - name: Disparar deploy no Render
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+          if [ -z "$RENDER_DEPLOY_HOOK_CIRINOGUSTAVOM" ]; then
             echo "Erro: secret RENDER_DEPLOY_HOOK_URL nao configurado."
             exit 1
           fi
