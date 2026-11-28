@@ -85,16 +85,21 @@ jobs:
         run: curl -fsS -X POST "${{ secrets.DEPLOY_HOOK_GABRIEL_MARTINS_CIRINO }}"
 
       - name: Health Check do minimercado
-        run: | 
-          for tentativa in ${seq 1 24} do; 
-            if curl --fail --silent \ 
-              ${{ vars.RENDER_MINIMERCADO_URL }}/api/health \  
-              | grep -q '"status": "ok"'; then 
-                echo "Health check passou!"; 
-                exit 0
-            fi 
+        run: |
+          BASE_URL="${{ vars.RENDER_MINIMERCADO_URL }}"
+          BASE_URL="${BASE_URL%/}"
+          if [ -z "$BASE_URL" ]; then
+            echo "Erro: variavel RENDER_MINIMERCADO_URL nao configurada em Variables."
+            exit 1
+          fi
+          for tentativa in $(seq 1 24); do
+            echo "Tentativa ${tentativa}/24: ${BASE_URL}/api/health"
+            if curl -fsS -m 10 "${BASE_URL}/api/health" | grep -Eq '"status":[[:space:]]*"ok"'; then
+              echo "Health check passou!"
+              exit 0
+            fi
             sleep 10
-          done 
-          echo "Health check falhou"; 
+          done
+          echo "Health check falhou"
           exit 1
 
