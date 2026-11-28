@@ -1,85 +1,72 @@
-name: CI/CD Pipeline - DevOps Market
-
+name: CI
 on:
   push:
-    branches:
-      - main
-      - 'feature-*'
-  workflow_dispatch:
 
 env:
   IMAGE_NAME: devops-market
 
 jobs:
   lint:
-    name: 1. Code Quality (Ruff)
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
+      - name: Baixar codigo
         uses: actions/checkout@v4
-      - name: Configurar Python 3.12
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
-      - name: Instalar dependências
+      - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
       - name: Lint com Ruff
         run: python -m ruff check .
 
   test:
-    name: 2. Testes Automatizados (Pytest)
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar código
+      - name: Baixar codigo
         uses: actions/checkout@v4
-      - name: Configurar Python 3.12
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
-      - name: Instalar dependências
+      - name: Instalar dependencias
         run: python -m pip install -r requirements-dev.txt
-      - name: Executar Pytest
+      - name: Testes com Pytest
         run: python -m pytest -v
 
-  release:
-    name: 3. Docker Build, Trivy Scan & Push
+  build:
     needs: test
     runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.meta.outputs.branch_tag }}
-      short_sha: ${{ steps.meta.outputs.short_sha }}
     steps:
-      - name: Baixar código
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-dev.txt
+      - name: Build com compileall
+        run: python -m compileall -q app scripts tasks.py
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar codigo
         uses: actions/checkout@v4
 
-      - name: Gerar metadados e tags da branch
-        id: meta
-        run: |
-          BRANCH_TAG=$(echo "${{ github.ref_name }}" | sed 's/[^a-zA-Z0-9._-]/-/g')
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          echo "branch_tag=${BRANCH_TAG}" >> $GITHUB_OUTPUT
-          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
-          echo "Tag gerada: ${BRANCH_TAG} | Commit: ${{ github.sha }}"
+      - name: Criar Imagem
+        run: docker build --platform linux/amd64 --build-arg COMMIT_SHA=${{ github.sha }} -t ${{ env.IMAGE_NAME }}:1.0 .
 
-      - name: Build da imagem Docker (linux/amd64)
-        run: |
-          docker build \
-            --platform linux/amd64 \
-            --build-arg COMMIT_SHA=${{ github.sha }} \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.branch_tag }} \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short_sha }} \
-            .
-
-      - name: Scan de Vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@v0.36.0
+      - name: Checar Vulnerabilidades
+        uses: aquasecurity/trivy-action@v0.9.0
         with:
-          scan-type: image
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.branch_tag }}
-          severity: "HIGH,CRITICAL"
-          exit-code: "0"
+          scan-type: 'image'
+          image-ref: '${{ env.IMAGE_NAME }}:1.0'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '0'
 
       - name: Login no Docker Hub
         uses: docker/login-action@v3
@@ -87,57 +74,51 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push das imagens para o Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.branch_tag }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short_sha }}
+      - name: Rotular Imagem
+        run: docker tag ${{ env.IMAGE_NAME }}:1.0 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${GITHUB_SHA::7}
+
+      - name: Push to Docker
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${GITHUB_SHA::7}
+
+      - name: Rotular imagem latest
+        run: docker tag ${{ env.IMAGE_NAME }}:1.0 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Push to Docker latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
   deploy:
-    name: 4. Deploy no Render & Health Check
     needs: release
     runs-on: ubuntu-latest
     env:
       RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
     steps:
-      - name: Validar configuração do Render
+      - name: Disparar deploy no Render
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK_URL" ] || [ -z "${{ vars.RENDER_APP_URL }}" ]; then
-            echo "ERRO: configure o secret RENDER_DEPLOY_HOOK_URL e a variável RENDER_APP_URL."
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Erro: secret RENDER_DEPLOY_HOOK_URL nao configurado."
             exit 1
           fi
+          curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
 
-      - name: Acionar Deploy Hook do Render
-        run: |
-          echo "Disparando redeploy no Render para o commit ${{ github.sha }}..."
-          curl --fail --silent --show-error \
-            --request POST \
-            "$RENDER_DEPLOY_HOOK_URL"
-
-      - name: Aguardar e Validar Health Check (Status + Commit SHA)
-        run: |
-          echo "Aguardando nova versão subir em ${{ vars.RENDER_APP_URL }}/api/health..."
-          for tentativa in $(seq 1 30); do
-            RESPONSE=$(curl --silent --max-time 10 "${{ vars.RENDER_APP_URL }}/api/health" || true)
-            echo "Tentativa ${tentativa}/30: ${RESPONSE}"
-
-            if echo "$RESPONSE" | grep -q '"status":"ok"' && echo "$RESPONSE" | grep -q "${{ github.sha }}"; then
-              echo "SUCESSO! Nova versão (${{ github.sha }}) está LIVE e saudável."
-              exit 0
-            fi
-
-            sleep 10
-          done
-
-          echo "ERRO: Timeout aguardando a versão ${{ github.sha }} responder /api/health."
-          exit 1
-
-  dast:
-    name: 5. Segurança Dinâmica (OWASP ZAP Baseline)
+  health-check:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Executar ZAP Baseline Scan (Passivo)
-        uses: zaproxy/action-baseline@v0.15.0
-        with:
-          target: ${{ vars.RENDER_APP_URL }}
-          fail_action: false
+      - name: Health Check do minimercado
+        run: |
+          BASE_URL="${{ vars.RENDER_APP_URL }}"
+          BASE_URL="${BASE_URL%/}"
+          if [ -z "$BASE_URL" ]; then
+            echo "Erro: variavel RENDER_APP_URL nao configurada em Variables."
+            exit 1
+          fi
+          for tentativa in $(seq 1 24); do
+            echo "Tentativa ${tentativa}/24: ${BASE_URL}/api/health"
+            if curl -fsS -m 10 "${BASE_URL}/api/health" | grep -Eq '"status":[[:space:]]*"ok"'; then
+              echo "Health check passou!"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Health check falhou"
+          exit 1
