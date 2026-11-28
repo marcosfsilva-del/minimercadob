@@ -87,6 +87,12 @@ jobs:
       - name: Push Docker
         run: docker push ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:${GITHUB_SHA::7} 
 
+      - name: Rotular Imagem Latest
+        run: docker tag minimercado-jproliveira1:1.0 ${{ secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:latest
+
+      - name: Push Docker Latest
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_JPROLIVEIRA }}/minimercado-jproliveira1:latest
+
   deploy:
     needs: release
     runs-on: ubuntu-latest
