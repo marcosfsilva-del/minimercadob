@@ -25,3 +25,13 @@ em `service.py`. Para mudar a regra, basta alterar essas duas constantes.
 | Uma categoria definida recebe desconto | `test_categoria_definida_recebe_desconto` |
 | Outras categorias não recebem desconto | `test_outras_categorias_nao_recebem_desconto` |
 | Regra fica documentada na feature | este README |
+
+## Requisito 042 - Testes De Desconto Por Categoria (Issue #29)
+
+Arquivo: `tests/test_requisito_042_desconto_por_categoria.py`.
+
+| Critério | Teste |
+| --- | --- |
+| Teste cobre categoria com desconto | `test_categoria_com_desconto` |
+| Teste cobre categoria sem desconto | `test_categoria_sem_desconto` |
+| Teste cobre total final | `test_total_final_com_desconto`, `test_total_final_sem_desconto`, `test_total_final_carrinho_vazio` |
