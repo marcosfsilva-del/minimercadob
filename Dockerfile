@@ -9,6 +9,8 @@ RUN python -m compileall -q app scripts tasks.py
 
 FROM python:3.12-slim
 
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 ENV PORT=3000
 ENV DATABASE_URL=sqlite:///data/devops_market.db
