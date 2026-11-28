@@ -84,6 +84,14 @@ jobs:
       - name: Push to Docker
         run: docker push ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:${GITHUB_SHA::7}
 
+      - name: Imagem Latest
+        run: docker tag minimercadob-marina:1.0 ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:latest
+        
+      - name: Imagem Latest
+        run: docker push ${{secrets.DOCKER_USERNAME_MARINA}}/minimercadob-marina:latest
+
+        
+
   deploy:
     needs: realese
     runs-on: ubuntu-latest
