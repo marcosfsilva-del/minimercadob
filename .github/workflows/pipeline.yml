@@ -96,14 +96,22 @@ jobs:
     name: 4. Deploy no Render & Health Check
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+    env:
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
     steps:
+      - name: Validar configuração do Render
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ] || [ -z "${{ vars.RENDER_APP_URL }}" ]; then
+            echo "ERRO: configure o secret RENDER_DEPLOY_HOOK_URL e a variável RENDER_APP_URL."
+            exit 1
+          fi
+
       - name: Acionar Deploy Hook do Render
         run: |
           echo "Disparando redeploy no Render para o commit ${{ github.sha }}..."
           curl --fail --silent --show-error \
             --request POST \
-            "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+            "$RENDER_DEPLOY_HOOK_URL"
 
       - name: Aguardar e Validar Health Check (Status + Commit SHA)
         run: |
